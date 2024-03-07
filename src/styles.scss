@@ -1,1 +1,59 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    --main-background: #090e25;
+    --secound-background: #111b36;
+
+    --button-font: #dddfe3;
+
+    --button-main: #202d4d;
+    --button-second: #6d73ff;
+
+    --main-border: #273152;
+
+    --main-font: #8c97bb;
+    --second-font: #c5c8cf;
+    --trird-font: #f3f3f5d8;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+html,
+body {
+    background-color: var(--secound-background);
+    height: 100%;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    color: var(--main-font);
+}
+
+.app-wrapper {
+    display: flex;
+    gap: 1rem;
+    height: 100%;
+    padding: 1% 3%;
+}
+
+.app-container {
+    box-shadow: var(--main-background) 0px 7px 29px 0px;
+    background-color: var(--main-background);
+    border: 1px solid var(--secound-background);
+    height: 100%;
+    padding: 3rem;
+    border-radius: 1rem;
+}
+
+.component-container {
+    height: 100%;
+}
