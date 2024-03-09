@@ -30,17 +30,6 @@ body {
     height: 100%;
 }
 
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    margin: 0;
-    color: var(--main-font);
-}
-
 .app-wrapper {
     display: flex;
     gap: 1rem;
@@ -49,18 +38,33 @@ h6 {
 }
 
 .app-container {
+    overflow-y: scroll;
+    min-height: 100%;
     background-color: var(--main-background);
     border: 1px solid var(--second-border);
-    height: 100%;
     padding: 3rem;
     border-radius: 1rem;
+
+    scrollbar-width: none;
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .component-container {
+    border-radius: 0.6rem;
+    max-height: 100%;
+    overflow-y: scroll;
     display: flex;
-    flex-wrap: wrap;
     flex-direction: column;
     gap: 2rem;
+
+    scrollbar-width: none;
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .btn-wrapper {
@@ -107,6 +111,10 @@ h6 {
 }
 
 .card {
+    min-width: 250px;
+    width: 250px;
+    max-width: 500px;
+    height: auto;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -116,6 +124,18 @@ h6 {
     box-shadow: 0 2px 7px 0 var(--general-shadow);
     border: 1px solid var(--main-border);
     background-color: var(--second-background);
+}
+
+.card-medium {
+    min-width: 500px;
+    width: 500px;
+    max-width: 1000px;
+}
+
+.card-large {
+    min-width: 1000px;
+    width: 1000px;
+    max-width: auto;
 }
 
 .select-item {
@@ -143,8 +163,6 @@ h6 {
 
         background-color: var(--second-background);
     }
-
-
 }
 
 .active-item {
@@ -154,4 +172,9 @@ h6 {
 
     border-left: 4px solid var(--btn-secondary);
     background-color: var(--btn-primary);
+}
+
+canvas {
+    width: auto !important;
+    height: auto !important;
 }
