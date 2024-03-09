@@ -1,0 +1,33 @@
+<div class="app-container">
+    <div class="logo" routerLink="/">
+        <img src="\assets\logo.png" width="40">
+        <div><span class="logo-first">Post</span><span class="logo-second">Mortem</span></div>
+    </div>
+    <div class="navbar">
+        <div routerLink="/search" routerLinkActive="active-item" class="select-item">
+            <mat-icon class="icon" fontIcon="search"></mat-icon>
+            <p>Search</p>
+        </div>
+        <div routerLink="/time" routerLinkActive="active-item" class="select-item">
+            <mat-icon class="icon" fontIcon="timer"></mat-icon>
+            <p>Execution Time</p>
+        </div>
+        <div routerLink="/requests" routerLinkActive="active-item" class="select-item">
+            <mat-icon class="icon" fontIcon="format_list_numbered"></mat-icon>
+            <p>Requests</p>
+        </div>
+        <div routerLink="/exceptions" routerLinkActive="active-item" class="select-item">
+            <mat-icon class="icon" fontIcon="priority_high"></mat-icon>
+            <p>Exceptions</p>
+        </div>
+        <div routerLink="/predictions" routerLinkActive="active-item" class="select-item">
+            <mat-icon class="icon" fontIcon="online_prediction"></mat-icon>
+            <p>Predictions</p>
+        </div>
+        <div routerLink="/metrics" routerLinkActive="active-item" class="select-item">
+            <mat-icon class="icon" fontIcon="analytics"></mat-icon>
+            <p>Custom Metrics</p>
+        </div>
+    </div>
+
+</div>

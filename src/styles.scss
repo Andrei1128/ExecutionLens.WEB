@@ -1,29 +1,32 @@
 :root {
-    --main-background: #090e25;
-    --secound-background: #111b36;
+    --main-background: #080f25;
+    --second-background: #101935;
 
-    --button-font: #dddfe3;
+    --main-font: #aeb9e1;
+    --second-font: white;
 
-    --button-main: #202d4d;
-    --button-second: #6d73ff;
+    --btn-primary: #212c4d;
+    --btn-secondary: #6c72ff;
 
-    --main-border: #273152;
+    --main-border: #343b4f;
+    --second-border: #182142;
 
-    --main-font: #8c97bb;
-    --second-font: #c5c8cf;
-    --trird-font: #f3f3f5d8;
+    --general-shadow: rgba(20, 20, 43, .06);
 }
 
 * {
+    color: var(--main-font);
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 20px;
 }
 
 html,
 body {
-    background-color: var(--secound-background);
+    background-color: var(--second-background);
     height: 100%;
 }
 
@@ -46,14 +49,109 @@ h6 {
 }
 
 .app-container {
-    box-shadow: var(--main-background) 0px 7px 29px 0px;
     background-color: var(--main-background);
-    border: 1px solid var(--secound-background);
+    border: 1px solid var(--second-border);
     height: 100%;
     padding: 3rem;
     border-radius: 1rem;
 }
 
 .component-container {
-    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.btn-wrapper {
+    flex-wrap: 1;
+    display: flex;
+    gap: 1rem;
+}
+
+.btn {
+    padding: 0.65rem 0.8rem;
+    border-radius: 0.4rem;
+    text-align: center;
+    text-decoration: none;
+    justify-content: center;
+    transition-duration: 300ms, 300ms;
+    transition-timing-function: ease, ease;
+    color: var(--second-font);
+    line-height: 1.167em;
+    font-weight: 500;
+    transition-property: background-color, color;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: var(--btn-primary);
+
+    &:hover {
+        background-color: var(--btn-secondary);
+    }
+}
+
+.btn-secondary {
+    background-color: var(--btn-secondary);
+
+    &:hover {
+        background-color: var(--btn-primary);
+    }
+}
+
+.cards-wrapper {
+    flex-wrap: wrap;
+    display: flex;
+    gap: 2rem;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 1.5rem;
+    border-radius: 0.6rem;
+    padding: 1.6rem;
+    box-shadow: 0 2px 7px 0 var(--general-shadow);
+    border: 1px solid var(--main-border);
+    background-color: var(--second-background);
+}
+
+.select-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 600;
+    font-size: 0.98rem;
+    padding: 0.82rem 1rem;
+    border-radius: 0.4rem;
+    border: 1px solid transparent;
+    border-left: 4px solid transparent;
+    transition: all 0.2s ease-in-out;
+
+    .icon {
+        font-size: 1.7rem;
+    }
+
+    &:hover {
+        * {
+            color: var(--second-font);
+        }
+
+        background-color: var(--second-background);
+    }
+
+
+}
+
+.active-item {
+    * {
+        color: var(--second-font);
+    }
+
+    border-left: 4px solid var(--btn-secondary);
+    background-color: var(--btn-primary);
 }
