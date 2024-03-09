@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import Chart from 'chart.js/auto';
 
 @Component({
@@ -9,29 +9,55 @@ import Chart from 'chart.js/auto';
   styleUrl: './time.component.scss',
 })
 export class TimeComponent implements OnInit {
-  chart: Chart | null = null;
+  xValues = ['Italy', 'France', 'Spain', 'USA', 'Argentina'];
+  yValues = [55, 49, 44, 24, 15];
+
+  methodsExecutionTimeChart: Chart | null = null;
+  endpointsExecutionTimeChart: any | null = null;
 
   ngOnInit() {
-    this.chart = new Chart('canvas', {
+    this.methodsExecutionTimeChart = new Chart('methodsExecutionTimeChart', {
       type: 'bar',
       data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: this.xValues,
         datasets: [
           {
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            borderWidth: 1,
+            label: 'min',
+            data: this.yValues,
+            borderWidth: 2,
+          },
+          {
+            label: 'avg',
+            data: this.yValues,
+            borderWidth: 2,
+          },
+          {
+            label: 'max',
+            data: this.yValues,
+            borderWidth: 2,
           },
         ],
       },
-      options: {},
     });
-  }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    if (this.chart) {
-      this.chart.resize();
-    }
+    this.endpointsExecutionTimeChart = new Chart(
+      'endpointsExecutionTimeChart',
+      {
+        type: 'doughnut',
+        data: {
+          labels: this.xValues,
+          datasets: [
+            {
+              data: this.yValues,
+            },
+          ],
+        },
+        options: {
+          animation: {
+            duration: 1000,
+          },
+        },
+      }
+    );
   }
 }

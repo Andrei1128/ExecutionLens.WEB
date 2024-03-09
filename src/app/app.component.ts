@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
+import Chart from 'chart.js/auto';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,12 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
   styleUrl: './app.component.scss',
   imports: [RouterOutlet, SidebarComponent],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'PostMortem.WEB';
+
+  ngOnInit() {
+    Chart.defaults.layout.padding = 10;
+    Chart.defaults.borderColor = '#343b4f';
+    Chart.defaults.color = '#aeb9e1';
+  }
 }
