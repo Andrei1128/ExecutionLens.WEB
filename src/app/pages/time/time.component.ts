@@ -9,8 +9,32 @@ import Chart from 'chart.js/auto';
   styleUrl: './time.component.scss',
 })
 export class TimeComponent implements OnInit {
-  xValues = ['Italy', 'France', 'Spain', 'USA', 'Argentina'];
-  yValues = [55, 49, 44, 24, 15];
+  xValues = [
+    'Italy',
+    'France',
+    'Spain',
+    'USA',
+    'Argentina',
+    'Italy',
+    'France',
+    'Spain',
+    'USA',
+    'Argentina',
+    'Italy',
+    'France',
+    'Spain',
+    'USA',
+    'Argentina',
+    'Italy',
+    'France',
+    'Spain',
+    'USA',
+    'Argentina',
+  ];
+  yValues = [
+    55, 49, 44, 24, 15, 55, 49, 44, 24, 15, 55, 49, 44, 24, 15, 55, 49, 44, 24,
+    15,
+  ];
 
   methodsExecutionTimeChart: Chart | null = null;
   endpointsExecutionTimeChart: any | null = null;
@@ -24,17 +48,14 @@ export class TimeComponent implements OnInit {
           {
             label: 'min',
             data: this.yValues,
-            borderWidth: 2,
           },
           {
             label: 'avg',
             data: this.yValues,
-            borderWidth: 2,
           },
           {
             label: 'max',
             data: this.yValues,
-            borderWidth: 2,
           },
         ],
       },
@@ -50,12 +71,13 @@ export class TimeComponent implements OnInit {
             {
               data: this.yValues,
             },
+            {
+              data: this.yValues,
+            },
+            {
+              data: this.yValues,
+            },
           ],
-        },
-        options: {
-          animation: {
-            duration: 1000,
-          },
         },
       }
     );
