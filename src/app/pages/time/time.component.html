@@ -1,10 +1,76 @@
 <div class="component-container">
     <div class="cards-wrapper">
-        <div class="card card-medium">
-            <canvas id="methodsExecutionTimeChart">{{methodsExecutionTimeChart}}</canvas>
-        </div>
-        <div class="card card-medium">
+        <div class="card">
+            <div class="filters">
+                <div class="form">
+                    <mat-form-field>
+                        <mat-label>Enter a date range</mat-label>
+                        <mat-date-range-input [formGroup]="filters" [rangePicker]="picker">
+                            <input matStartDate formControlName="dateStart" placeholder="Start date">
+                            <input matEndDate formControlName="dateEnd" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Select controllers</mat-label>
+                        <mat-select [formGroup]="filters" multiple>
+                            @for (controller of controllerList; track controller) {
+                            <mat-option [value]="controller">{{controller}}</mat-option> }
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Select endpoints</mat-label>
+                        <mat-select [formGroup]="filters" multiple>
+                            @for (endpoint of endpointList; track endpoint) {
+                            <mat-option [value]="endpoint">{{endpoint}}</mat-option> }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <button mat-stroked-button>Filter</button>
+            </div>
             <canvas id="endpointsExecutionTimeChart">{{endpointsExecutionTimeChart}}</canvas>
+        </div>
+    </div>
+    <div class="cards-wrapper">
+        <div class="card">
+            <div class="filters">
+                <div class="form">
+                    <mat-form-field>
+                        <mat-label>Enter a date range</mat-label>
+                        <mat-date-range-input [formGroup]="filters" [rangePicker]="picker">
+                            <input matStartDate formControlName="dateStart" placeholder="Start date">
+                            <input matEndDate formControlName="dateEnd" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Select controllers</mat-label>
+                        <mat-select [formGroup]="filters" multiple>
+                            @for (controller of controllerList; track controller) {
+                            <mat-option [value]="controller">{{controller}}</mat-option> }
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Select endpoints</mat-label>
+                        <mat-select [formGroup]="filters" multiple>
+                            @for (endpoint of endpointList; track endpoint) {
+                            <mat-option [value]="endpoint">{{endpoint}}</mat-option> }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <button mat-stroked-button>Filter</button>
+            </div>
+            <canvas id="methodsExecutionTimeChart">{{methodsExecutionTimeChart}}</canvas>
         </div>
     </div>
 </div>

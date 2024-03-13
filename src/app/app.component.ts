@@ -11,7 +11,7 @@ import Chart from 'chart.js/auto';
   imports: [RouterOutlet, SidebarComponent],
 })
 export class AppComponent implements OnInit {
-  title = 'PostMortem.WEB';
+  title = 'Execution Lens';
 
   legendMargin = {
     id: 'legendMargin',

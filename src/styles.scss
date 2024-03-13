@@ -14,6 +14,60 @@
     --general-shadow: rgba(20, 20, 43, .06);
 }
 
+.mat-calendar-body-cell-content,
+.mat-calendar-body-label,
+.mat-datepicker-content .mat-calendar-previous-button:not(.mat-mdc-button-disabled),
+.mat-datepicker-content .mat-calendar-next-button:not(.mat-mdc-button-disabled),
+.mat-date-range-input-separator {
+    color: var(--main-font) !important;
+}
+
+.mat-pseudo-checkbox-full.mat-pseudo-checkbox-checked,
+.mat-pseudo-checkbox-full.mat-pseudo-checkbox-indeterminate {
+    background-color: var(--btn-secondary) !important;
+    border-color: var(--btn-secondary) !important;
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+    color: var(--btn-secondary) !important;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
+    border-bottom-color: var(--btn-secondary) !important;
+}
+
+.mat-calendar-table-header-divider::after {
+    background-color: var(--main-background) !important;
+}
+
+.mat-calendar-body-selected {
+    background-color: var(--btn-secondary) !important;
+    color: var(--second-font) !important;
+}
+
+.mat-pseudo-checkbox-full,
+.mat-pseudo-checkbox {
+    border-color: var(--main-font) !important;
+}
+
+mat-hint {
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled),
+.mat-datepicker-content,
+div.mat-mdc-select-panel {
+
+    * {
+        font-weight: 600;
+        font-size: 0.97rem;
+    }
+
+    background-color: var(--btn-primary) !important;
+}
+
 * {
     color: var(--main-font);
     box-sizing: border-box;
@@ -53,6 +107,8 @@ body {
 }
 
 .component-container {
+    border-top: 0.1px solid var(--main-border);
+    border-bottom: 0.1px solid var(--main-border);
     border-radius: 0.6rem;
     max-height: 100%;
     overflow-y: scroll;
@@ -114,11 +170,10 @@ body {
     min-width: 250px;
     width: 250px;
     max-width: 100%;
-    height: auto;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    gap: 1.5rem;
+    gap: 1rem;
     border-radius: 0.6rem;
     padding: 1.6rem;
     box-shadow: 0 2px 7px 0 var(--general-shadow);
@@ -161,6 +216,34 @@ body {
 
         background-color: var(--second-background);
     }
+}
+
+.filters {
+    padding: 1rem;
+    padding-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 2.5rem;
+
+    .mat-mdc-outlined-button {
+        background-color: var(--btn-secondary);
+        padding: 1.25rem 1.8rem;
+        margin-top: 0.7rem;
+        margin-right: 3rem;
+        font-weight: 600;
+        transition: all 0.2s ease-in-out;
+
+        * {
+            color: white;
+        }
+    }
+}
+
+.form {
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .active-item {

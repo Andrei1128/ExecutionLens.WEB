@@ -9,30 +9,20 @@
 
 .logo {
     cursor: pointer;
-    height: 45px;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 1rem;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     transition-duration: 300ms, 300ms;
     transition-timing-function: ease, ease;
 
     &:hover {
         gap: 0.5rem;
-        transform: scale(1.1);
-    }
 
-    div {
-        transition-duration: 300ms, 300ms;
-        transition-timing-function: ease, ease;
-
-        &:hover {
-            gap: 0.4rem;
+        .logo-first {
+            padding-right: 1.5rem;
         }
-
-        display: flex;
-        gap: 0.3rem;
     }
 
     div>* {
@@ -44,13 +34,19 @@
     }
 }
 
+.logo-title {
+    display: flex;
+    flex-direction: column;
+}
+
 .logo-first {
-    padding-bottom: 0.4rem;
+    transition-duration: 300ms, 300ms;
+    transition-timing-function: ease, ease;
+    padding-right: 2rem;
     align-self: flex-start;
 }
 
 .logo-second {
-    padding-top: 0.4rem;
     align-self: flex-end;
 }
 
