@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SharedModule } from '../../_core/modules/shared.module';
 import Chart from 'chart.js/auto';
 import {
   FormGroup,
@@ -6,30 +7,26 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-time',
   standalone: true,
-  imports: [
-    MatFormFieldModule,
-    MatDatepickerModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatSelectModule,
-    MatButtonModule,
-  ],
+  imports: [SharedModule, FormsModule, ReactiveFormsModule],
   templateUrl: './time.component.html',
   styleUrl: './time.component.scss',
 })
 export class TimeComponent implements OnInit {
+  endpointsExecutionTimeChart: Chart | null = null;
   methodsExecutionTimeChart: Chart | null = null;
-  endpointsExecutionTimeChart: any | null = null;
 
-  filters = new FormGroup({
+  endpointsFilters = new FormGroup({
+    dateStart: new FormControl<Date | null>(null),
+    dateEnd: new FormControl<Date | null>(null),
+    controllers: new FormControl(),
+    endpoints: new FormControl(),
+  });
+
+  methodsFilters = new FormGroup({
     dateStart: new FormControl<Date | null>(null),
     dateEnd: new FormControl<Date | null>(null),
     controllers: new FormControl(),
@@ -37,24 +34,32 @@ export class TimeComponent implements OnInit {
   });
 
   ngOnInit() {
+    this.createEndpointsExecutionTimeChart();
+    this.createMethodsExecutionTimeChart();
+
+    this.fetchEndpointsExecutionTime();
+    this.fetchMethodsExecutionTime();
+  }
+
+  createEndpointsExecutionTimeChart() {
+    this.endpointsExecutionTimeChart = new Chart(
+      'endpointsExecutionTimeChart',
+      {
+        type: 'bar',
+        data: {
+          labels: [],
+          datasets: [],
+        },
+      }
+    );
+  }
+
+  createMethodsExecutionTimeChart() {
     this.methodsExecutionTimeChart = new Chart('methodsExecutionTimeChart', {
       type: 'bar',
       data: {
-        labels: this.methodsExecutionTimes.map((x) => x.method),
-        datasets: [
-          {
-            label: 'min',
-            data: this.methodsExecutionTimes.map((x) => x.min),
-          },
-          {
-            label: 'avg',
-            data: this.methodsExecutionTimes.map((x) => x.avg),
-          },
-          {
-            label: 'max',
-            data: this.methodsExecutionTimes.map((x) => x.max),
-          },
-        ],
+        labels: [],
+        datasets: [],
       },
       options: {
         scales: {
@@ -67,30 +72,70 @@ export class TimeComponent implements OnInit {
         },
       },
     });
+  }
 
-    this.endpointsExecutionTimeChart = new Chart(
-      'endpointsExecutionTimeChart',
-      {
-        type: 'bar',
-        data: {
-          labels: this.endpointsExecutionTime.map((x) => x.method),
-          datasets: [
-            {
-              label: 'min',
-              data: this.endpointsExecutionTime.map((x) => x.min),
-            },
-            {
-              label: 'avg',
-              data: this.endpointsExecutionTime.map((x) => x.avg),
-            },
-            {
-              label: 'max',
-              data: this.endpointsExecutionTime.map((x) => x.max),
-            },
-          ],
-        },
-      }
+  fetchMethodsExecutionTime() {
+    this.methodsExecutionTimeChart?.data.datasets.splice(
+      0,
+      this.methodsExecutionTimeChart?.data.datasets.length
     );
+    this.methodsExecutionTimeChart?.data.labels?.splice(
+      0,
+      this.methodsExecutionTimeChart?.data.labels?.length
+    );
+
+    this.methodsExecutionTimeChart?.data.labels?.push(
+      ...this.methodsExecutionTimes.map((x) => x.method)
+    );
+
+    this.methodsExecutionTimeChart?.data.datasets.push({
+      label: 'min',
+      data: this.methodsExecutionTimes.map((x) => x.min),
+    });
+
+    this.methodsExecutionTimeChart?.data.datasets.push({
+      label: 'avg',
+      data: this.methodsExecutionTimes.map((x) => x.avg),
+    });
+
+    this.methodsExecutionTimeChart?.data.datasets.push({
+      label: 'max',
+      data: this.methodsExecutionTimes.map((x) => x.max),
+    });
+
+    this.methodsExecutionTimeChart?.update();
+  }
+
+  fetchEndpointsExecutionTime() {
+    this.endpointsExecutionTimeChart?.data.datasets.splice(
+      0,
+      this.endpointsExecutionTimeChart?.data.datasets.length
+    );
+    this.endpointsExecutionTimeChart?.data.labels?.splice(
+      0,
+      this.endpointsExecutionTimeChart?.data.labels?.length
+    );
+
+    this.endpointsExecutionTimeChart?.data.labels?.push(
+      ...this.endpointsExecutionTime.map((x) => x.method)
+    );
+
+    this.endpointsExecutionTimeChart?.data.datasets.push({
+      label: 'min',
+      data: this.endpointsExecutionTime.map((x) => x.min),
+    });
+
+    this.endpointsExecutionTimeChart?.data.datasets.push({
+      label: 'avg',
+      data: this.endpointsExecutionTime.map((x) => x.avg),
+    });
+
+    this.endpointsExecutionTimeChart?.data.datasets.push({
+      label: 'max',
+      data: this.endpointsExecutionTime.map((x) => x.max),
+    });
+
+    this.endpointsExecutionTimeChart?.update();
   }
 
   controllerList: string[] = [
