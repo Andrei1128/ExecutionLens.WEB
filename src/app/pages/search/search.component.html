@@ -1,1 +1,86 @@
-<p>search works!</p>
+<div class="component-container">
+    <div class="cards-wrapper">
+        <div class="card">
+            <form class="filters" [formGroup]="filters" (submit)="fetch()">
+                <div class="form">
+                    <mat-form-field>
+                        <mat-label>Enter a date range</mat-label>
+                        <mat-date-range-input [rangePicker]="picker">
+                            <input matStartDate formControlName="dateStart" placeholder="Start date">
+                            <input matEndDate formControlName="dateEnd" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Select controllers</mat-label>
+                        <mat-select multiple>
+                            @for (controller of controllerList; track controller) {
+                            <mat-option [value]="controller">{{controller}}</mat-option> }
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Select endpoints</mat-label>
+                        <mat-select multiple>
+                            @for (endpoint of endpointList; track endpoint) {
+                            <mat-option [value]="endpoint">{{endpoint}}</mat-option> }
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-checkbox>With exception</mat-checkbox>
+
+                    <mat-form-field>
+                        <mat-label>Order by</mat-label>
+                        <mat-select>
+                            @for (property of orderOptions; track property) {
+                            <mat-option [value]="property.value">{{property.viewValue}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Page size</mat-label>
+                        <mat-select>
+                            @for (property of orderOptions; track property) {
+                            <mat-option [value]="property.value">{{property.viewValue}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Search by id</mat-label>
+                        <input matInput>
+                    </mat-form-field>
+
+                    <mat-accordion>
+                        <mat-expansion-panel hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-form-field>
+                                    <mat-label>Search</mat-label>
+                                    <input matInput>
+                                </mat-form-field>
+                            </mat-expansion-panel-header>
+
+                            <mat-radio-group aria-label="Select an option">
+                                <label>Input</label>
+                                <mat-radio-button value="1">Option 1</mat-radio-button>
+                                <mat-radio-button value="2">Option 2</mat-radio-button>
+                            </mat-radio-group>
+
+                            <mat-radio-group aria-label="Select an option">
+                                <label>Output</label>
+                                <mat-radio-button value="1">Option 1</mat-radio-button>
+                                <mat-radio-button value="2">Option 2</mat-radio-button>
+                            </mat-radio-group>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+
+                <button mat-stroked-button>Fetch</button>
+            </form>
+        </div>
+    </div>
+</div>
