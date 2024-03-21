@@ -28,7 +28,9 @@
     border-color: var(--btn-secondary) !important;
 }
 
-.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text,
+.mat-pseudo-checkbox-minimal.mat-pseudo-checkbox-checked::after,
+.mat-pseudo-checkbox-minimal.mat-pseudo-checkbox-indeterminate::after {
     color: var(--btn-secondary) !important;
 }
 
@@ -237,6 +239,15 @@ body {
             color: white;
         }
     }
+}
+
+.chart-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    max-height: 71.3vh;
 }
 
 .form {

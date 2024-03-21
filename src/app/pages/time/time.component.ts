@@ -50,6 +50,19 @@ export class TimeComponent implements OnInit {
           labels: [],
           datasets: [],
         },
+        options: {
+          plugins: {
+            title: {
+              text: 'Endpoints Execution Time',
+              display: true,
+              font: {
+                size: 14,
+                style: 'oblique',
+              },
+              align: 'start',
+            },
+          },
+        },
       }
     );
   }
@@ -62,6 +75,17 @@ export class TimeComponent implements OnInit {
         datasets: [],
       },
       options: {
+        plugins: {
+          title: {
+            text: 'Methods Execution Time',
+            display: true,
+            font: {
+              size: 14,
+              style: 'oblique',
+            },
+            align: 'start',
+          },
+        },
         scales: {
           x: {
             stacked: true,

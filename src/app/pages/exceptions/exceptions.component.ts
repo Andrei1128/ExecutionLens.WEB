@@ -37,6 +37,19 @@ export class ExceptionsComponent implements OnInit {
         labels: [],
         datasets: [],
       },
+      options: {
+        plugins: {
+          title: {
+            text: 'Methods Exception Count',
+            display: true,
+            font: {
+              size: 14,
+              style: 'oblique',
+            },
+            align: 'start',
+          },
+        },
+      },
     });
   }
 

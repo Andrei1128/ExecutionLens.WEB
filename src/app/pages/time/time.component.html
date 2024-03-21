@@ -1,11 +1,11 @@
 <div class="component-container">
     <div class="cards-wrapper">
         <div class="card">
-            <div class="filters">
+            <form class="filters" [formGroup]="endpointsFilters" (submit)="fetchEndpointsExecutionTime()">
                 <div class="form">
                     <mat-form-field>
                         <mat-label>Enter a date range</mat-label>
-                        <mat-date-range-input [formGroup]="endpointsFilters" [rangePicker]="endpointsPicker">
+                        <mat-date-range-input [rangePicker]="endpointsPicker">
                             <input matStartDate formControlName="dateStart" placeholder="Start date">
                             <input matEndDate formControlName="dateEnd" placeholder="End date">
                         </mat-date-range-input>
@@ -16,7 +16,7 @@
 
                     <mat-form-field>
                         <mat-label>Select controllers</mat-label>
-                        <mat-select [formGroup]="endpointsFilters" multiple>
+                        <mat-select multiple>
                             @for (controller of controllerList; track controller) {
                             <mat-option [value]="controller">{{controller}}</mat-option> }
                         </mat-select>
@@ -24,25 +24,27 @@
 
                     <mat-form-field>
                         <mat-label>Select endpoints</mat-label>
-                        <mat-select [formGroup]="endpointsFilters" multiple>
+                        <mat-select multiple>
                             @for (endpoint of endpointList; track endpoint) {
                             <mat-option [value]="endpoint">{{endpoint}}</mat-option> }
                         </mat-select>
                     </mat-form-field>
                 </div>
 
-                <button mat-stroked-button (click)="fetchEndpointsExecutionTime()">Filter</button>
+                <button mat-stroked-button>Fetch</button>
+            </form>
+            <div class="chart-wrapper">
+                <canvas id="endpointsExecutionTimeChart">{{endpointsExecutionTimeChart}}</canvas>
             </div>
-            <canvas id="endpointsExecutionTimeChart">{{endpointsExecutionTimeChart}}</canvas>
         </div>
     </div>
     <div class="cards-wrapper">
         <div class="card">
-            <div class="filters">
+            <form class="filters" [formGroup]="methodsFilters" (submit)="fetchMethodsExecutionTime()">
                 <div class="form">
                     <mat-form-field>
                         <mat-label>Enter a date range</mat-label>
-                        <mat-date-range-input [formGroup]="methodsFilters" [rangePicker]="methodPicker">
+                        <mat-date-range-input [rangePicker]="methodPicker">
                             <input matStartDate formControlName="dateStart" placeholder="Start date">
                             <input matEndDate formControlName="dateEnd" placeholder="End date">
                         </mat-date-range-input>
@@ -53,7 +55,7 @@
 
                     <mat-form-field>
                         <mat-label>Select controllers</mat-label>
-                        <mat-select [formGroup]="methodsFilters" multiple>
+                        <mat-select multiple>
                             @for (controller of controllerList; track controller) {
                             <mat-option [value]="controller">{{controller}}</mat-option> }
                         </mat-select>
@@ -61,16 +63,18 @@
 
                     <mat-form-field>
                         <mat-label>Select endpoints</mat-label>
-                        <mat-select [formGroup]="methodsFilters" multiple>
+                        <mat-select multiple>
                             @for (endpoint of endpointList; track endpoint) {
                             <mat-option [value]="endpoint">{{endpoint}}</mat-option> }
                         </mat-select>
                     </mat-form-field>
                 </div>
 
-                <button mat-stroked-button (click)="fetchMethodsExecutionTime()">Filter</button>
+                <button mat-stroked-button>Fetch</button>
+            </form>
+            <div class="chart-wrapper">
+                <canvas id="methodsExecutionTimeChart">{{methodsExecutionTimeChart}}</canvas>
             </div>
-            <canvas id="methodsExecutionTimeChart">{{methodsExecutionTimeChart}}</canvas>
         </div>
     </div>
 </div>

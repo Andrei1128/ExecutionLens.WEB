@@ -37,6 +37,22 @@ export class RequestsComponent implements OnInit {
         labels: [],
         datasets: [],
       },
+      options: {
+        plugins: {
+          title: {
+            text: 'Requests Count',
+            display: true,
+            font: {
+              size: 14,
+              style: 'oblique',
+            },
+            align: 'start',
+          },
+          legend: {
+            display: false,
+          },
+        },
+      },
     });
   }
 
@@ -55,18 +71,7 @@ export class RequestsComponent implements OnInit {
     );
 
     this.requestsCountChart?.data.datasets.push({
-      label: 'min',
-      data: this.requestsCount.map((x) => x.min),
-    });
-
-    this.requestsCountChart?.data.datasets.push({
-      label: 'avg',
       data: this.requestsCount.map((x) => x.avg),
-    });
-
-    this.requestsCountChart?.data.datasets.push({
-      label: 'max',
-      data: this.requestsCount.map((x) => x.max),
     });
 
     this.requestsCountChart?.update();
@@ -85,45 +90,36 @@ export class RequestsComponent implements OnInit {
   requestsCount = [
     {
       method: 'CalculateMedian',
-      min: 5,
       avg: 15,
-      max: 30,
     },
     {
       method: 'ComputeFactorial',
-      min: 1,
       avg: 10,
-      max: 20,
     },
     {
       method: 'GeneratePrimeNumbers',
-      min: 50,
+
       avg: 75,
-      max: 100,
     },
     {
       method: 'FindRoot',
-      min: 15,
+
       avg: 35,
-      max: 60,
     },
     {
       method: 'CalculateExponential',
-      min: 25,
+
       avg: 50,
-      max: 100,
     },
     {
       method: 'FindLargestPalindrome',
-      min: 10,
+
       avg: 20,
-      max: 40,
     },
     {
       method: 'CalculateStandardDeviation',
-      min: 5,
+
       avg: 12,
-      max: 25,
     },
   ];
 }
