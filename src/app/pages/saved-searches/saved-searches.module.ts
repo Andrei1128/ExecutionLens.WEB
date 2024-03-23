@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MetricsRoutingModule } from './metrics-routing.module';
+import { SavedSearchesRoutingModule } from './saved-searches-routing.module';
 
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    MetricsRoutingModule
+    SavedSearchesRoutingModule
   ]
 })
-export class MetricsModule { }
+export class SavedSearchesModule { }

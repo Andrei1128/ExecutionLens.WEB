@@ -11,6 +11,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-search',
@@ -23,12 +24,17 @@ import {
     MatInputModule,
     MatExpansionModule,
     MatRadioModule,
+    CommonModule,
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
 export class SearchComponent implements OnInit {
   requestsCountChart: Chart | null = null;
+  searchAccordionFocus: boolean = false;
+  searchInputFocus: boolean = false;
+  emptySearch: boolean = true;
+  searchById: boolean = false;
 
   filters = new FormGroup({
     dateStart: new FormControl<Date | null>(null),
