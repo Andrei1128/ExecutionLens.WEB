@@ -28,9 +28,11 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'metrics',
+    path: 'saved-searches',
     loadChildren: () =>
-      import('./pages/metrics/metrics.module').then((m) => m.MetricsModule),
+      import('./pages/saved-searches/saved-searches.module').then(
+        (m) => m.SavedSearchesModule
+      ),
   },
   {
     path: 'requests',
