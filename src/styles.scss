@@ -74,6 +74,23 @@
     border-color: var(--btn-secondary) !important;
 }
 
+
+
+.mat-mdc-paginator-icon {
+    fill: var(--main-font) !important;
+}
+
+.mat-mdc-icon-button:disabled {
+    opacity: 0.5;
+}
+
+
+mat-paginator {
+    padding-right: 2rem;
+    user-select: none;
+    background-color: var(--second-background) !important;
+}
+
 .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text,
 .mat-pseudo-checkbox-minimal.mat-pseudo-checkbox-checked::after,
 .mat-pseudo-checkbox-minimal.mat-pseudo-checkbox-indeterminate::after {
@@ -266,18 +283,11 @@ body {
     }
 }
 
-.filters {
-    padding: 1rem;
-    padding-bottom: 0;
-    display: flex;
-    justify-content: space-between;
-    gap: 2.5rem;
-
+.filters,
+.buttons-wrapper {
     .mat-mdc-outlined-button {
         background-color: var(--btn-secondary);
-        padding: 1.25rem 1.8rem;
-        margin-top: 0.7rem;
-        margin-right: 3rem;
+        padding: 0.5rem 0.8rem;
         font-weight: 600;
         transition: all 0.2s ease-in-out;
 
@@ -286,6 +296,22 @@ body {
         }
     }
 }
+
+
+.filters {
+    padding: 1rem;
+    padding-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 2.5rem;
+
+    .mat-mdc-outlined-button {
+        margin-top: 0.7rem;
+        margin-right: 3rem;
+        padding: 1.25rem 1.8rem;
+    }
+}
+
 
 .chart-wrapper {
     display: flex;

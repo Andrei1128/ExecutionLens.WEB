@@ -74,11 +74,7 @@
 
                         <mat-form-field>
                             <mat-label>Page size</mat-label>
-                            <mat-select [disabled]="searchByIdActive">
-                                @for (property of orderOptions; track property) {
-                                <mat-option [value]="property.value">{{property.viewValue}}</mat-option>
-                                }
-                            </mat-select>
+                            <input (keypress)="numberOnly($event)" [disabled]="searchByIdActive" matInput>
                         </mat-form-field>
                     </div>
 
@@ -89,6 +85,17 @@
                 </div>
                 <button mat-stroked-button>Fetch</button>
             </form>
+        </div>
+    </div>
+    <div class="cards-wrapper">
+        <div class="card">
+            <div class="buttons-wrapper">
+                <button mat-stroked-button>Save Search</button>
+                <button mat-stroked-button>Export Data</button>
+            </div>
+            <mat-paginator [showFirstLastButtons]="true" [hidePageSize]="true" [length]="100" [pageSize]="10"
+                aria-label="Select page">
+            </mat-paginator>
         </div>
     </div>
 </div>

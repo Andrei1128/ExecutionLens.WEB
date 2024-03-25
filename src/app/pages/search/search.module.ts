@@ -3,12 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { SearchRoutingModule } from './search-routing.module';
 
-
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    SearchRoutingModule
-  ]
+  imports: [CommonModule, SearchRoutingModule],
 })
-export class SearchModule { }
+export class SearchModule {}

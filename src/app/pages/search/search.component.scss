@@ -74,3 +74,11 @@
 .search-id {
     width: min-content;
 }
+
+.buttons-wrapper {
+    margin-top: 0.5rem;
+    margin-right: 3.5rem;
+    display: flex;
+    gap: 2.5rem;
+    justify-content: flex-end;
+}
