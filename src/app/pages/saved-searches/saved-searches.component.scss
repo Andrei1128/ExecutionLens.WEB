@@ -1,0 +1,41 @@
+.search-wrapper {
+    letter-spacing: 0.2px;
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-radius: 0.6rem;
+    background-color: var(--btn-primary);
+    cursor: pointer;
+}
+
+.search {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.search-metadata {
+    font-weight: 600;
+    display: flex;
+    gap: 4rem;
+
+    p {
+        color: var(--second-font);
+    }
+}
+
+.card {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    gap: 1.5rem;
+}
+
+.del-btn {
+    opacity: 0.7;
+    transition: 0.2s ease-in-out;
+
+    &:hover {
+        opacity: 1;
+    }
+}

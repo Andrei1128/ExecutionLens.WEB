@@ -1,1 +1,16 @@
-<p>saved-searches works!</p>
+<div class="component-container">
+    <div class="cards-wrapper">
+        <div class="card">
+            <div class="search-wrapper" *ngFor="let search of searches">
+                <div class="search">
+                    <div class="search-metadata">
+                        <p>{{search.Name}}</p>
+                        <p>{{search.SavedAt}}</p>
+                    </div>
+                    <p>{{search.Search | json}}</p>
+                </div>
+                <button class="del-btn" mat-mini-fab color="warn"><mat-icon>delete</mat-icon></button>
+            </div>
+        </div>
+    </div>
+</div>
