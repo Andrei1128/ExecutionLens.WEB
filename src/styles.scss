@@ -14,11 +14,38 @@
     --general-shadow: rgba(20, 20, 43, .06);
 }
 
+.mat-mdc-radio-button .mdc-radio .mdc-radio__native-control:enabled+.mdc-radio__background .mdc-radio__inner-circle,
+.mat-mdc-radio-button .mdc-radio .mdc-radio__native-control:enabled:checked+.mdc-radio__background .mdc-radio__outer-circle {
+    border-color: var(--btn-secondary) !important;
+}
+
+.mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background,
+.mdc-checkbox .mdc-checkbox__native-control:enabled:indeterminate~.mdc-checkbox__background,
+.mdc-checkbox .mdc-checkbox__native-control[data-indeterminate=true]:enabled~.mdc-checkbox__background,
+.mdc-checkbox .mdc-checkbox__native-control:enabled:focus:checked~.mdc-checkbox__background,
+.mdc-checkbox .mdc-checkbox__native-control:enabled:focus:indeterminate~.mdc-checkbox__background {
+    border-color: var(--btn-secondary) !important;
+    background-color: var(--btn-secondary) !important;
+}
+
+
+.mat-date-range-input-inner[disabled],
+.mdc-text-field--filled.mdc-text-field--disabled .mdc-text-field__input {
+    color: var(--main-font) !important;
+}
+
+.mdc-text-field--filled.mdc-text-field--disabled {
+    background-color: var(--btn-primary) !important;
+    opacity: 0.7;
+}
+
 .mat-mdc-outlined-button[disabled],
 .mat-mdc-outlined-button.mat-mdc-button-disabled {
     opacity: 0.7;
 }
 
+.mat-mdc-checkbox.mat-mdc-checkbox-disabled label,
+.mdc-checkbox .mdc-checkbox__native-control[disabled]:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background,
 .mat-mdc-radio-button .mdc-radio [aria-disabled=true] .mdc-radio__native-control:not(:checked)+.mdc-radio__background .mdc-radio__outer-circle,
 .mat-mdc-radio-button .mdc-radio .mdc-radio__native-control:disabled:not(:checked)+.mdc-radio__background .mdc-radio__outer-circle,
 .mat-mdc-radio-button .mdc-radio--disabled+label {

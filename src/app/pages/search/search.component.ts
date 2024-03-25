@@ -34,16 +34,26 @@ export class SearchComponent implements OnInit {
   searchAccordionFocus: boolean = false;
   searchInputFocus: boolean = false;
   emptySearch: boolean = true;
-  searchById: boolean = false;
+  searchByIdActive: boolean = false;
 
   filters = new FormGroup({
     dateStart: new FormControl<Date | null>(null),
     dateEnd: new FormControl<Date | null>(null),
+    search: new FormControl(),
     controllers: new FormControl(),
     endpoints: new FormControl(),
+    searchId: new FormControl(),
   });
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.filters.get('search')?.valueChanges.subscribe((value: string) => {
+      this.emptySearch = value.trim().length === 0;
+    });
+
+    this.filters.get('searchId')?.valueChanges.subscribe((value: string) => {
+      this.searchByIdActive = value.trim().length > 0;
+    });
+  }
 
   fetch() {}
 
