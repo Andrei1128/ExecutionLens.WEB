@@ -45,6 +45,13 @@ export const routes: Routes = [
       import('./pages/time/time.module').then((m) => m.TimeModule),
   },
   {
+    path: 'log-details',
+    loadChildren: () =>
+      import('./pages/log-details/log-details.module').then(
+        (m) => m.LogDetailsModule
+      ),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

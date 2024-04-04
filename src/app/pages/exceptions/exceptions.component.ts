@@ -7,16 +7,28 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { NgFor, NgIf } from '@angular/common';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { Exception } from '../../_core/models/Exception';
 
 @Component({
   selector: 'app-exceptions',
   standalone: true,
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgFor,
+    NgIf,
+    MatPaginatorModule,
+  ],
   templateUrl: './exceptions.component.html',
   styleUrl: './exceptions.component.scss',
 })
 export class ExceptionsComponent implements OnInit {
   exceptionsCountChart: any | null = null;
+  exceptions: Exception[] = [];
+  exceptionsDetailsMethod: string | null = null;
 
   filters = new FormGroup({
     dateStart: new FormControl<Date | null>(null),
@@ -28,6 +40,21 @@ export class ExceptionsComponent implements OnInit {
   ngOnInit() {
     this.createExceptionsCountChart();
     this.fetchExceptionsCount();
+
+    this.exceptions = [
+      {
+        LogId: '1asd345t123asd',
+        Method: 'SavedSearch1',
+        OccuredAt: new Date(),
+        StackTrace: 'Error: Cannot read property "id" of undefined',
+      },
+      {
+        LogId: '1asd345t123asd',
+        Method: 'SavedSearch2',
+        OccuredAt: new Date(),
+        StackTrace: 'Error: Cannot read property "id" of undefined',
+      },
+    ];
   }
 
   createExceptionsCountChart() {
@@ -38,6 +65,12 @@ export class ExceptionsComponent implements OnInit {
         datasets: [],
       },
       options: {
+        onClick: (e, item) => {
+          if (item.length > 0) {
+            this.exceptionsDetailsMethod =
+              this.exceptionsCountChart.data.labels[item[0].index];
+          }
+        },
         plugins: {
           title: {
             text: 'Methods Exception Count',

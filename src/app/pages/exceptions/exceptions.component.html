@@ -38,4 +38,24 @@
             </div>
         </div>
     </div>
+    <div *ngIf="exceptionsDetailsMethod != null" class="cards-wrapper">
+        <div class="card">
+            <h2 class="method-title">{{exceptionsDetailsMethod}}</h2>
+
+            <div class="exceptions-wrapper" *ngFor="let exception of exceptions">
+                <div class="exception">
+                    <div class="exception-metadata">
+                        <p>{{exception.Method}}</p>
+                        <p>{{exception.OccuredAt}}</p>
+                        <p class="logId">{{exception.LogId}}</p>
+                    </div>
+                    <p>{{exception.StackTrace}}</p>
+                </div>
+            </div>
+
+            <mat-paginator [showFirstLastButtons]="true" [hidePageSize]="true" [length]="100" [pageSize]="10"
+                aria-label="Select page">
+            </mat-paginator>
+        </div>
+    </div>
 </div>

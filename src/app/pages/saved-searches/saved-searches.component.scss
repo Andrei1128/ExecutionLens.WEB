@@ -1,4 +1,4 @@
-.search-wrapper {
+.searches-wrapper {
     letter-spacing: 0.2px;
     display: flex;
     gap: 3rem;
@@ -7,6 +7,12 @@
     border-radius: 0.6rem;
     background-color: var(--btn-primary);
     cursor: pointer;
+    transition: 0.2s ease-in-out;
+
+    &:hover {
+        opacity: 0.85;
+
+    }
 }
 
 .search {
@@ -32,10 +38,9 @@
 }
 
 .del-btn {
-    opacity: 0.7;
     transition: 0.2s ease-in-out;
 
     &:hover {
-        opacity: 1;
+        opacity: 0.85;
     }
 }

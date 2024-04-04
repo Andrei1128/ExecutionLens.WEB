@@ -1,4 +1,4 @@
-import { SearchFilter } from './searchFilter';
+import { SearchFilter } from './SearchFilter';
 
 export interface SavedSearch {
   Name: string;

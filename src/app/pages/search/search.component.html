@@ -93,6 +93,20 @@
                 <button mat-stroked-button>Save Search</button>
                 <button mat-stroked-button>Export Data</button>
             </div>
+
+            <div routerLink="/log-details" class="logs-wrapper" *ngFor="let log of logs">
+                <div class="log">
+                    <div class="log-metadata">
+                        <p>{{log.Controller}}</p>
+                        <p>{{log.Endpoint}}</p>
+                        <p class="logId">{{log.LogId}}</p>
+                    </div>
+                    <p>{{log.HasException}}</p>
+                    <p>{{log.CalledAt}}</p>
+                    <p>{{log.Duration}}</p>
+                </div>
+            </div>
+
             <mat-paginator [showFirstLastButtons]="true" [hidePageSize]="true" [length]="100" [pageSize]="10"
                 aria-label="Select page">
             </mat-paginator>

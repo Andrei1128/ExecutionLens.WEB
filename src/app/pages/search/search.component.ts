@@ -13,6 +13,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -27,6 +28,7 @@ import { CommonModule } from '@angular/common';
     MatRadioModule,
     CommonModule,
     MatPaginatorModule,
+    RouterModule,
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
@@ -37,6 +39,8 @@ export class SearchComponent implements OnInit {
   searchInputFocus: boolean = false;
   emptySearch: boolean = true;
   searchByIdActive: boolean = false;
+
+  logs: any[] = [];
 
   filters = new FormGroup({
     dateStart: new FormControl<Date | null>(null),
@@ -55,6 +59,25 @@ export class SearchComponent implements OnInit {
     this.filters.get('searchId')?.valueChanges.subscribe((value: string) => {
       this.searchByIdActive = value.trim().length > 0;
     });
+
+    this.logs = [
+      {
+        LogId: '1asd345t123asd',
+        Controller: 'SavedSearch1',
+        Endpoint: 'user',
+        HasException: true,
+        CalledAt: new Date(),
+        Duration: 123,
+      },
+      {
+        LogId: '1asd345t123asd',
+        Controller: 'SavedSearch2',
+        Endpoint: 'user',
+        HasException: false,
+        CalledAt: new Date(),
+        Duration: 123,
+      },
+    ];
   }
 
   numberOnly(event: any): boolean {
