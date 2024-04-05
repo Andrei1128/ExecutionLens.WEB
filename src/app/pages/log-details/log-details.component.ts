@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Log } from '../../_core/models/Log';
-import * as mermaid from 'mermaid';
+import mermaid from 'mermaid';
 import Chart from 'chart.js/auto';
 import { MatButton } from '@angular/material/button';
 
@@ -12,8 +12,12 @@ import { MatButton } from '@angular/material/button';
   styleUrl: './log-details.component.scss',
 })
 export class LogDetailsComponent implements OnInit {
-  @ViewChild('sequenceDiagram') sequenceDiagramElement: ElementRef | undefined;
+  @ViewChild('sequenceDiagramDiv') sequenceDiagramElement:
+    | ElementRef
+    | undefined;
+
   exceptionsCountChart: any | null = null;
+
   log: Log | null = null;
 
   ngOnInit() {
@@ -137,19 +141,59 @@ export class LogDetailsComponent implements OnInit {
   }
 
   async initializeSequenceDiagram(): Promise<void> {
-    const graphDefinition = `sequenceDiagram
-    Alice->>John: Hello John, how are you?
-    John-->>Alice: Great!
-    Alice-)John: See you later!`;
+    const theme = `
+      %%{
+        init: {
+          "theme": "base",
+          "themeVariables": {
+            "primaryColor": "#212c4d",
+            "secondaryColor": "#212c4d",
+            "noteBkgColor": "#212c4d",
 
-    const { svg } = await mermaid.default.render(
-      'sequenceDiagram',
-      graphDefinition
+            "primaryBorderColor": "#717582",
+            "noteBorderColor": "#b9bcc7",
+            "activationBorderColor": "#b9bcc7",
+
+            "primaryTextColor": "#b9bcc7",
+            "noteTextColor": "#b9bcc7"
+          }
+        }
+      }%%`;
+
+    const graphDefinition = `
+    sequenceDiagram
+    actor Alice
+    actor Bob
+    Alice->>Bob: Hi Bob
+    Bob->>Alice: Hi Alice
+    Alice->John: Hello John, how are you?
+    Note over Alice,John: A typical interaction
+    Alice->>Bob: Hello Bob, how are you ?
+    Bob->>Alice: Fine, thank you. And you?
+    create participant Carl
+    Alice->>Carl: Hi Carl!
+    create actor D as Donald
+    Carl->>D: Hi!
+    destroy Carl
+    Alice-xCarl: We are too many
+    destroy Bob
+    Bob->>Alice: I agree
+    Alice->>+John: Hello John, how are you?
+    Alice->>+John: John, can you hear me?
+    John-->>-Alice: Hi Alice, I can hear you!
+    John-->>-Alice: I feel great!`;
+
+    const { svg, bindFunctions } = await mermaid.render(
+      'sequenceDiagramSvg',
+      theme + graphDefinition
     );
 
     const element: Element = this.sequenceDiagramElement?.nativeElement;
+
     element.innerHTML = svg;
+    bindFunctions?.(element);
   }
+
   createExceptionsCountChart() {
     this.exceptionsCountChart = new Chart('exceptionsCountChart', {
       type: 'doughnut',
