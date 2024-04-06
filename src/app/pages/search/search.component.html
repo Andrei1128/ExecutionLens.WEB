@@ -3,21 +3,20 @@
         <div class="card">
             <form class="filters" [formGroup]="filters" (submit)="fetch()">
                 <div class="form">
-                    <div class="form-item">
-                        <div class="search-accordion" (mouseenter)="searchAccordionFocus = true"
-                            (mouseleave)="searchAccordionFocus = false">
+                    <div class="form-item search-form-item">
+                        <div class="search-accordion">
                             <div class="search-header">
                                 <mat-form-field class="search-bar">
                                     <mat-label>Search</mat-label>
-                                    <input formControlName="search" [disabled]="searchByIdActive" matInput
-                                        (focus)="searchInputFocus = true" (blur)="searchInputFocus = false">
-                                    <button [disabled]="emptySearch || searchByIdActive"
-                                        *ngIf="(searchInputFocus || searchAccordionFocus) && !searchByIdActive"
-                                        class="add-btn" mat-stroked-button>Add</button>
+                                    <input [formControl]="searchBar" [disabled]="searchByIdActive" matInput>
+                                    <button (click)="addAdvancedFilter()" [disabled]="emptySearch || searchByIdActive"
+                                        *ngIf="(!emptySearch) && !searchByIdActive" class="add-btn"
+                                        mat-stroked-button>Add</button>
                                 </mat-form-field>
                             </div>
-                            <mat-radio-group [disabled]="emptySearch || searchByIdActive" class="search-body"
-                                *ngIf="(searchInputFocus || searchAccordionFocus) && !searchByIdActive">
+                            <mat-radio-group [formControl]="radioButtonGroup"
+                                [disabled]="emptySearch || searchByIdActive" class="search-body"
+                                *ngIf="(!emptySearch) && !searchByIdActive">
                                 <div class="options-col">
                                     <label>Input</label>
                                     <mat-radio-button value="1">Include</mat-radio-button>
@@ -25,11 +24,25 @@
                                 </div>
                                 <div class="options-col second-col">
                                     <label>Output</label>
-                                    <mat-radio-button value="1">Include</mat-radio-button>
-                                    <mat-radio-button value="2">Exclude</mat-radio-button>
+                                    <mat-radio-button value="3">Include</mat-radio-button>
+                                    <mat-radio-button value="4">Exclude</mat-radio-button>
+                                </div>
+                                <div class="options-col second-col">
+                                    <label>Information</label>
+                                    <mat-radio-button value="5">Include</mat-radio-button>
+                                    <mat-radio-button value="6">Exclude</mat-radio-button>
                                 </div>
                             </mat-radio-group>
+
                         </div>
+                        <mat-chip-set>
+                            <mat-chip-option *ngFor="let filter of advancedFilters"
+                                (click)="removeAdvancedFilter(filter)">
+                                <div class="search-filter-chip">
+                                    {{filter.Target}} {{filter.Operation}} '{{filter.Value}}' <mat-icon>close</mat-icon>
+                                </div>
+                            </mat-chip-option>
+                        </mat-chip-set>
                     </div>
                     <div class="form-item">
                         <mat-form-field>
@@ -59,8 +72,13 @@
                             </mat-select>
                         </mat-form-field>
 
-                        <mat-checkbox [disabled]="searchByIdActive" class="exception-checkbox">With
-                            exception</mat-checkbox>
+                        <mat-form-field>
+                            <mat-label>Has exception</mat-label>
+                            <mat-select [disabled]="searchByIdActive">
+                                @for (endpoint of ["Any","Yes","No"]; track endpoint) {
+                                <mat-option [value]="endpoint">{{endpoint}}</mat-option> }
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                     <div class="form-item">
                         <mat-form-field>
@@ -99,14 +117,14 @@
                     <div class="log-metadata">
                         <p>{{log.Controller}}</p>
                         <p>{{log.Endpoint}}</p>
-                        <p class="logId">{{log.LogId}}</p>
+                        <p class="logId">{{log.Id}}</p>
                     </div>
                     <mat-chip-set>
                         <mat-chip-option disabled>
-                            Date Start: {{(log.CalledAt | dateFormat)}}
+                            Date Start: {{(log.EntryTime | dateFormat)}}
                         </mat-chip-option>
                         <mat-chip-option disabled>
-                            Date End: {{(log.EndedAt | dateFormat)}}
+                            Date End: {{(log.ExitTime | dateFormat)}}
                         </mat-chip-option>
                         <mat-chip-option disabled>
                             Duration: {{(log.Duration)}}

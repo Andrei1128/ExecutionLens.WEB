@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatIcon } from '@angular/material/icon';
 import Chart from 'chart.js/auto';
 import {
   FormGroup,
@@ -23,6 +24,9 @@ import {
   MatDialogActions,
   MatDialogClose,
 } from '@angular/material/dialog';
+import { Filter } from '../../_core/models/SearchFilter';
+import { ElementRef } from '@angular/core';
+import { LogOverview } from '../../_core/models/LogOverview';
 
 @Component({
   selector: 'app-search',
@@ -30,6 +34,7 @@ import {
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
   imports: [
+    MatIcon,
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
@@ -50,26 +55,42 @@ import {
 })
 export class SearchComponent implements OnInit {
   requestsCountChart: Chart | null = null;
-  searchAccordionFocus: boolean = false;
-  searchInputFocus: boolean = false;
   emptySearch: boolean = true;
   searchByIdActive: boolean = false;
-
   @ViewChild('saveSearchDialog') saveSearchDialog: TemplateRef<any> | undefined;
+  searchBar: FormControl<string | null> = new FormControl(null);
   searchFilterName: FormControl<string | null> = new FormControl(null);
-
-  logs: any[] = [];
+  radioButtonGroup = new FormControl();
+  advancedFilters: Filter[] = [];
+  logs: LogOverview[] = [];
 
   filters = new FormGroup({
     dateStart: new FormControl<Date | null>(null),
     dateEnd: new FormControl<Date | null>(null),
-    search: new FormControl(),
     controllers: new FormControl(),
     endpoints: new FormControl(),
     searchId: new FormControl(),
   });
 
   constructor(public dialog: MatDialog) {}
+
+  addAdvancedFilter() {
+    const searchValue = this.searchBar.value;
+    if (searchValue != null && searchValue.trim().length > 0) {
+      this.advancedFilters.push({
+        Target: 'search',
+        Operation: 'contains',
+        Value: searchValue,
+      });
+
+      this.searchBar.setValue(null);
+      this.emptySearch = true;
+    }
+  }
+
+  removeAdvancedFilter(filter: Filter) {
+    this.advancedFilters.splice(this.advancedFilters.indexOf(filter), 1);
+  }
 
   openDialog() {
     this.dialog.open(this.saveSearchDialog!, {
@@ -96,8 +117,8 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.filters.get('search')?.valueChanges.subscribe((value: string) => {
-      this.emptySearch = value.trim().length === 0;
+    this.searchBar.valueChanges.subscribe((value: string | null) => {
+      this.emptySearch = value?.trim().length === 0;
     });
 
     this.filters.get('searchId')?.valueChanges.subscribe((value: string) => {
@@ -106,21 +127,21 @@ export class SearchComponent implements OnInit {
 
     this.logs = [
       {
-        LogId: '1asd345t123asd',
+        Id: '1asd345t123asd',
         Controller: 'UserController',
         Endpoint: '/product',
         HasException: true,
-        CalledAt: new Date(),
-        EndedAt: new Date(),
+        EntryTime: new Date(),
+        ExitTime: new Date(),
         Duration: '00:00:23:123135123Z',
       },
       {
-        LogId: '1asd345t123asd',
+        Id: '1asd345t123asd',
         Controller: 'PaymentController',
         Endpoint: '/payment',
         HasException: false,
-        CalledAt: new Date(),
-        EndedAt: new Date(),
+        EntryTime: new Date(),
+        ExitTime: new Date(),
         Duration: '00:00:23:123135123Z',
       },
     ];

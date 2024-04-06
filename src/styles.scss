@@ -27,6 +27,7 @@
     border-radius: 0.5rem !important;
 }
 
+.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled),
 .mat-mdc-standard-chip.mdc-evolution-chip--disabled {
     box-sizing: content-box;
     background-color: #182342 !important;
