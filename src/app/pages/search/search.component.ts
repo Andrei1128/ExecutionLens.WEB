@@ -25,7 +25,6 @@ import {
   MatDialogClose,
 } from '@angular/material/dialog';
 import { Filter } from '../../_core/models/SearchFilter';
-import { ElementRef } from '@angular/core';
 import { LogOverview } from '../../_core/models/LogOverview';
 
 @Component({
@@ -76,10 +75,18 @@ export class SearchComponent implements OnInit {
 
   addAdvancedFilter() {
     const searchValue = this.searchBar.value;
-    if (searchValue != null && searchValue.trim().length > 0) {
+    const operation = this.radioButtonGroup.value;
+
+    if (
+      searchValue != null &&
+      searchValue.trim().length > 0 &&
+      operation != null
+    ) {
+      const filter = operation.split(' ');
+
       this.advancedFilters.push({
-        Target: 'search',
-        Operation: 'contains',
+        Target: filter[0],
+        Operation: filter[1],
         Value: searchValue,
       });
 

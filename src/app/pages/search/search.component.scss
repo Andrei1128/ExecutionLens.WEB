@@ -1,5 +1,5 @@
 .search-accordion {
-    width: 35rem;
+    width: 40rem;
 
     position: relative;
 }
@@ -21,7 +21,7 @@
 }
 
 .search-body {
-    width: 35rem;
+    width: 40rem;
 
     justify-content: space-around;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -41,10 +41,10 @@
     flex-direction: column;
 
     label {
-        align-self: center;
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: 0.95rem;
         margin: 0.5rem 0;
+        margin-left: 1rem;
     }
 }
 
@@ -74,10 +74,10 @@
 .search-form-item {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0;
+    margin-bottom: 8px;
 
     mat-chip-set {
-        margin-top: -20px;
+        margin-top: -25px;
     }
 
     mat-chip-option {
