@@ -127,16 +127,16 @@
                     </div>
                     <mat-chip-set>
                         <mat-chip-option disabled>
-                            Date Start: {{(log.EntryTime | dateFormat)}}
+                            Called at: {{(log.EntryTime | dateFormat)}}
                         </mat-chip-option>
                         <mat-chip-option disabled>
-                            Date End: {{(log.ExitTime | dateFormat)}}
+                            Ended at: {{(log.ExitTime | dateFormat)}}
                         </mat-chip-option>
                         <mat-chip-option disabled>
                             Duration: {{(log.Duration)}}
                         </mat-chip-option>
                         <mat-chip-option disabled>
-                            Has Exception: {{log.HasException}}
+                            Has exception: {{log.HasException}}
                         </mat-chip-option>
                     </mat-chip-set>
                 </div>
@@ -150,10 +150,10 @@
 </div>
 
 <ng-template #saveSearchDialog let-dialogRef>
-    <h2 mat-dialog-title>Save Search Filters</h2>
+    <h2 mat-dialog-title>Save search filters</h2>
     <mat-dialog-content class="mat-typography">
         <mat-form-field class="save-filter-input">
-            <mat-label>Filter Name</mat-label>
+            <mat-label>Filter name</mat-label>
             <input [formControl]="searchFilterName" matInput cdkFocusInitial>
         </mat-form-field>
     </mat-dialog-content>

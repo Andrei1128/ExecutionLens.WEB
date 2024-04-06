@@ -17,13 +17,13 @@
                             Endpoints: {{search.Search.Endpoints.toString().replace(',',', ')}}
                         </mat-chip-option>
                         <mat-chip-option *ngIf="search.Search.DateStart != null" disabled>
-                            Date Start: {{(search.Search.DateStart | dateFormat).split(' ')[0]}}
+                            Date start: {{(search.Search.DateStart | dateFormat).split(' ')[0]}}
                         </mat-chip-option>
                         <mat-chip-option *ngIf="search.Search.DateEnd != null" disabled>
-                            Date End: {{(search.Search.DateEnd | dateFormat).split(' ')[0]}}
+                            Date end: {{(search.Search.DateEnd | dateFormat).split(' ')[0]}}
                         </mat-chip-option>
                         <mat-chip-option *ngIf="search.Search.WithException != null" disabled>
-                            With Exception: {{search.Search.WithException }}
+                            Has exception: {{search.Search.WithException }}
                         </mat-chip-option>
 
                         <div *ngIf="search.Search.Filters != null && search.Search.Filters.length > 0">
@@ -33,10 +33,10 @@
                         </div>
 
                         <mat-chip-option *ngIf="search.Search.OrderBy != null" disabled>
-                            Order By: {{search.Search.OrderBy }}
+                            Order by: {{search.Search.OrderBy }}
                         </mat-chip-option>
                         <mat-chip-option *ngIf="search.Search.PageSize != null" disabled>
-                            Page Size: {{search.Search.PageSize }}
+                            Page size: {{search.Search.PageSize }}
                         </mat-chip-option>
 
                         <mat-chip-option *ngIf="search.Search.Id != null" disabled>
