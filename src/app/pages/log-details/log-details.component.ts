@@ -6,11 +6,24 @@ import { MatButton } from '@angular/material/button';
 import { DateFormatPipe } from '../../_core/pipes/DateFormatPipe';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
+import {
+  PanZoomConfig,
+  PanZoomAPI,
+  PanZoomModel,
+  PanZoomConfigOptions,
+  PanZoomComponent,
+} from 'ngx-panzoom';
 
 @Component({
   selector: 'app-log-details',
   standalone: true,
-  imports: [MatButton, DateFormatPipe, MatCardModule, MatDividerModule],
+  imports: [
+    MatButton,
+    DateFormatPipe,
+    MatCardModule,
+    MatDividerModule,
+    PanZoomComponent,
+  ],
   templateUrl: './log-details.component.html',
   styleUrl: './log-details.component.scss',
 })
@@ -20,6 +33,15 @@ export class LogDetailsComponent implements OnInit {
     | undefined;
 
   methodsExecutionTimeChart: any | null = null;
+
+  panZoomConfig: PanZoomConfig = new PanZoomConfig({
+    freeMouseWheelFactor: 0.001,
+    zoomLevels: 10,
+    neutralZoomLevel: -0.1,
+    zoomOnMouseWheel: false,
+    zoomOnDoubleClick: false,
+    friction: 100,
+  });
 
   log: Log | null = null;
 
@@ -151,7 +173,6 @@ export class LogDetailsComponent implements OnInit {
     const theme = `
       %%{
         init: {
-          "width": "100%",
           "theme": "base",
           "themeVariables": {
             "primaryColor": "#212c4d",
