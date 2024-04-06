@@ -151,6 +151,7 @@ export class LogDetailsComponent implements OnInit {
     const theme = `
       %%{
         init: {
+          "width": "100%",
           "theme": "base",
           "themeVariables": {
             "primaryColor": "#212c4d",
@@ -169,6 +170,15 @@ export class LogDetailsComponent implements OnInit {
 
     const graphDefinition = `
     sequenceDiagram
+    actor ASs
+    actor ASs2
+    actor ASs3
+    actor ASs4
+    actor ASs5
+    actor ASs6
+    actor ASs44
+    actor ASs52
+    actor ASs61
     actor Alice
     actor Bob
     Alice->>Bob: Hi Bob
@@ -179,6 +189,24 @@ export class LogDetailsComponent implements OnInit {
     Bob->>Alice: Fine, thank you. And you?
     create participant Carl
     Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
+    Alice->>Carl: Hi Carl!
     create actor D as Donald
     Carl->>D: Hi!
     destroy Carl
@@ -188,7 +216,9 @@ export class LogDetailsComponent implements OnInit {
     Alice->>+John: Hello John, how are you?
     Alice->>+John: John, can you hear me?
     John-->>-Alice: Hi Alice, I can hear you!
-    John-->>-Alice: I feel great!`;
+    John-->>-Alice: I feel great!
+    create actor A as Andrei
+    create actor S as Sa`;
 
     const { svg, bindFunctions } = await mermaid.render(
       'sequenceDiagramSvg',
