@@ -2,12 +2,47 @@
     <div class="cards-wrapper">
         <div class="card">
             <div class="searches-wrapper" *ngFor="let search of searches">
-                <div class="search">
+                <div routerLink="/search" class="search">
                     <div class="search-metadata">
                         <p>{{search.Name}}</p>
-                        <p>{{search.SavedAt}}</p>
+                        <p>{{(search.SavedAt | dateFormat).split('.')[0]}}</p>
                     </div>
-                    <p>{{search.Search | json}}</p>
+                    <mat-chip-set>
+                        <mat-chip-option
+                            *ngIf="search.Search.Controllers != null && search.Search.Controllers.length > 0" disabled>
+                            Controllers: {{search.Search.Controllers.toString().replace(',',', ')}}
+                        </mat-chip-option>
+                        <mat-chip-option *ngIf="search.Search.Endpoints != null && search.Search.Endpoints.length > 0"
+                            disabled>
+                            Endpoints: {{search.Search.Endpoints.toString().replace(',',', ')}}
+                        </mat-chip-option>
+                        <mat-chip-option *ngIf="search.Search.DateStart != null" disabled>
+                            Date Start: {{(search.Search.DateStart | dateFormat).split(' ')[0]}}
+                        </mat-chip-option>
+                        <mat-chip-option *ngIf="search.Search.DateEnd != null" disabled>
+                            Date End: {{(search.Search.DateEnd | dateFormat).split(' ')[0]}}
+                        </mat-chip-option>
+                        <mat-chip-option *ngIf="search.Search.WithException != null" disabled>
+                            With Exception: {{search.Search.WithException }}
+                        </mat-chip-option>
+
+                        <div *ngIf="search.Search.Filters != null && search.Search.Filters.length > 0">
+                            <mat-chip-option *ngFor="let filter of search.Search.Filters" disabled>
+                                {{filter.Target}} {{filter.Operation}} '{{filter.Value}}'
+                            </mat-chip-option>
+                        </div>
+
+                        <mat-chip-option *ngIf="search.Search.OrderBy != null" disabled>
+                            Order By: {{search.Search.OrderBy }}
+                        </mat-chip-option>
+                        <mat-chip-option *ngIf="search.Search.PageSize != null" disabled>
+                            Page Size: {{search.Search.PageSize }}
+                        </mat-chip-option>
+
+                        <mat-chip-option *ngIf="search.Search.Id != null" disabled>
+                            Id: {{search.Search.Id }}
+                        </mat-chip-option>
+                    </mat-chip-set>
                 </div>
                 <button class="del-btn" mat-mini-fab color="warn"><mat-icon>delete</mat-icon></button>
             </div>

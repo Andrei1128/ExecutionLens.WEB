@@ -1,13 +1,30 @@
 <div class="component-container">
     <div class="cards-wrapper">
-        <div class="card">
+        <div class="card log-overview-card">
             <div class="buttons-wrapper">
                 <button mat-stroked-button>Replay</button>
             </div>
+            <mat-card>
+                <div class="log-overview">
+                    <p><span class="row-header">Id:</span> <span>{{log?.Id}}</span></p>
+                    <mat-divider></mat-divider>
+                    <p><span class="row-header">Controller:</span> <span>{{log?.Class}}</span></p>
+                    <mat-divider></mat-divider>
+                    <p><span class="row-header">Endpoint:</span> <span>{{log?.Method}}</span></p>
+                    <mat-divider></mat-divider>
+                    <p><span class="row-header">Has Exceptions:</span> <span>{{true}}</span></p>
+                    <mat-divider></mat-divider>
+                    <p><span class="row-header">Entry Time:</span> <span>{{log?.EntryTime | dateFormat}}</span></p>
+                    <mat-divider></mat-divider>
+                    <p><span class="row-header">Exit Time:</span> <span>{{log?.ExitTime | dateFormat}}</span></p>
+                    <mat-divider></mat-divider>
+                    <p><span class="row-header">Duration:</span> <span>{{'00:00:23:123135123Z'}}</span></p>
+                </div>
+            </mat-card>
         </div>
         <div class="card">
             <div class="chart-wrapper">
-                <canvas id="exceptionsCountChart">{{exceptionsCountChart}}</canvas>
+                <canvas id="methodsExecutionTimeChart">{{methodsExecutionTimeChart}}</canvas>
             </div>
         </div>
     </div>

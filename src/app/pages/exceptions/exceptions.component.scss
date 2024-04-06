@@ -52,3 +52,9 @@
     text-align: end;
     font-size: 0.9rem;
 }
+
+#exceptionsCountChart {
+    &:hover {
+        cursor: pointer;
+    }
+}

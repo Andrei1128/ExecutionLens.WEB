@@ -1,4 +1,6 @@
 export interface Log {
+  Id: string;
+
   Class: string;
   Method: string;
 

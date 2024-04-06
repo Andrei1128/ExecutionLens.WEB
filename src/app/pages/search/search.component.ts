@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { SharedModule } from '../../_core/modules/shared.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatChipsModule } from '@angular/material/chips';
 import Chart from 'chart.js/auto';
 import {
   FormGroup,
@@ -14,10 +15,20 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { DateFormatPipe } from '../../_core/pipes/DateFormatPipe';
+import {
+  MatDialog,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogClose,
+} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-search',
   standalone: true,
+  templateUrl: './search.component.html',
+  styleUrl: './search.component.scss',
   imports: [
     SharedModule,
     FormsModule,
@@ -29,9 +40,13 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     MatPaginatorModule,
     RouterModule,
+    MatChipsModule,
+    DateFormatPipe,
+    MatDialogContent,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogTitle,
   ],
-  templateUrl: './search.component.html',
-  styleUrl: './search.component.scss',
 })
 export class SearchComponent implements OnInit {
   requestsCountChart: Chart | null = null;
@@ -39,6 +54,9 @@ export class SearchComponent implements OnInit {
   searchInputFocus: boolean = false;
   emptySearch: boolean = true;
   searchByIdActive: boolean = false;
+
+  @ViewChild('saveSearchDialog') saveSearchDialog: TemplateRef<any> | undefined;
+  searchFilterName: FormControl<string | null> = new FormControl(null);
 
   logs: any[] = [];
 
@@ -50,6 +68,32 @@ export class SearchComponent implements OnInit {
     endpoints: new FormControl(),
     searchId: new FormControl(),
   });
+
+  constructor(public dialog: MatDialog) {}
+
+  openDialog() {
+    this.dialog.open(this.saveSearchDialog!, {
+      height: '250px',
+      width: '400px',
+      disableClose: true,
+    });
+  }
+
+  closeDialog(flag: boolean) {
+    if (flag == true) {
+      const searchFilterName = this.searchFilterName.value;
+
+      if (searchFilterName != null && searchFilterName.trim().length > 0) {
+        // Save search filter
+
+        this.dialog.closeAll();
+      } else return;
+    } else {
+      this.searchFilterName.setValue(null);
+
+      this.dialog.closeAll();
+    }
+  }
 
   ngOnInit() {
     this.filters.get('search')?.valueChanges.subscribe((value: string) => {
@@ -63,19 +107,21 @@ export class SearchComponent implements OnInit {
     this.logs = [
       {
         LogId: '1asd345t123asd',
-        Controller: 'SavedSearch1',
-        Endpoint: 'user',
+        Controller: 'UserController',
+        Endpoint: '/product',
         HasException: true,
         CalledAt: new Date(),
-        Duration: 123,
+        EndedAt: new Date(),
+        Duration: '00:00:23:123135123Z',
       },
       {
         LogId: '1asd345t123asd',
-        Controller: 'SavedSearch2',
-        Endpoint: 'user',
+        Controller: 'PaymentController',
+        Endpoint: '/payment',
         HasException: false,
         CalledAt: new Date(),
-        Duration: 123,
+        EndedAt: new Date(),
+        Duration: '00:00:23:123135123Z',
       },
     ];
   }

@@ -14,6 +14,30 @@
     --general-shadow: rgba(20, 20, 43, .06);
 }
 
+.mat-mdc-dialog-container .mdc-dialog__title {
+    color: var(--second-font) !important;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+    background-color: #1a233f !important;
+    border: 1px solid var(--main-border) !important;
+}
+
+.mat-mdc-standard-chip {
+    border-radius: 0.5rem !important;
+}
+
+.mat-mdc-standard-chip.mdc-evolution-chip--disabled {
+    box-sizing: content-box;
+    background-color: #182342 !important;
+    opacity: 1 !important;
+    border: 0.1px solid var(--main-border) !important;
+}
+
+.mat-mdc-standard-chip.mdc-evolution-chip--disabled .mdc-evolution-chip__text-label {
+    color: var(--main-font) !important;
+}
+
 .mat-mdc-radio-button .mdc-radio .mdc-radio__native-control:enabled+.mdc-radio__background .mdc-radio__inner-circle,
 .mat-mdc-radio-button .mdc-radio .mdc-radio__native-control:enabled:checked+.mdc-radio__background .mdc-radio__outer-circle {
     border-color: var(--btn-secondary) !important;
@@ -73,8 +97,6 @@
     background-color: var(--btn-secondary) !important;
     border-color: var(--btn-secondary) !important;
 }
-
-
 
 .mat-mdc-paginator-icon {
     fill: var(--main-font) !important;

@@ -10,6 +10,8 @@ import {
 import { NgFor, NgIf } from '@angular/common';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { Exception } from '../../_core/models/Exception';
+import { DateFormatPipe } from '../../_core/pipes/DateFormatPipe';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-exceptions',
@@ -21,6 +23,8 @@ import { Exception } from '../../_core/models/Exception';
     NgFor,
     NgIf,
     MatPaginatorModule,
+    DateFormatPipe,
+    RouterModule,
   ],
   templateUrl: './exceptions.component.html',
   styleUrl: './exceptions.component.scss',
@@ -65,6 +69,10 @@ export class ExceptionsComponent implements OnInit {
         datasets: [],
       },
       options: {
+        onHover: (e, item) => {
+          (e?.native?.target as HTMLElement).style.cursor =
+            item?.length > 0 ? 'pointer' : 'auto';
+        },
         onClick: (e, item) => {
           if (item.length > 0) {
             this.exceptionsDetailsMethod =

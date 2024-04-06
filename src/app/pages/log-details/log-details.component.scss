@@ -8,3 +8,41 @@
     align-items: flex-end;
     justify-content: flex-end;
 }
+
+.log-overview {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+
+    p {
+        display: flex;
+        font-weight: 600;
+        font-size: 1.15rem;
+    }
+
+    .row-header {
+        color: var(--second-font);
+        width: 140px;
+    }
+}
+
+mat-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    padding: 3.5rem 4rem;
+    width: 95%;
+    background-color: var(--btn-primary);
+}
+
+.log-overview-card {
+    gap: 5rem;
+}
+
+mat-divider {
+    align-self: center;
+    width: 140%;
+    opacity: 0.6;
+    border-top-color: var(--main-font);
+}

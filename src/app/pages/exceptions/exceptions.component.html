@@ -9,7 +9,7 @@
                             <input matStartDate formControlName="dateStart" placeholder="Start date">
                             <input matEndDate formControlName="dateEnd" placeholder="End date">
                         </mat-date-range-input>
-                        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                        <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-date-range-picker #picker></mat-date-range-picker>
                     </mat-form-field>
@@ -42,11 +42,11 @@
         <div class="card">
             <h2 class="method-title">{{exceptionsDetailsMethod}}</h2>
 
-            <div class="exceptions-wrapper" *ngFor="let exception of exceptions">
+            <div routerLink="/log-details" class="exceptions-wrapper" *ngFor="let exception of exceptions">
                 <div class="exception">
                     <div class="exception-metadata">
                         <p>{{exception.Method}}</p>
-                        <p>{{exception.OccuredAt}}</p>
+                        <p>{{exception.OccuredAt | dateFormat}}</p>
                         <p class="logId">{{exception.LogId}}</p>
                     </div>
                     <p>{{exception.StackTrace}}</p>

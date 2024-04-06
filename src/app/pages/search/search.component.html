@@ -38,7 +38,7 @@
                                 <input matStartDate formControlName="dateStart" placeholder="Start date">
                                 <input matEndDate formControlName="dateEnd" placeholder="End date">
                             </mat-date-range-input>
-                            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                            <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
                             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-date-range-picker #picker></mat-date-range-picker>
                         </mat-form-field>
@@ -90,7 +90,7 @@
     <div class="cards-wrapper">
         <div class="card">
             <div class="buttons-wrapper">
-                <button mat-stroked-button>Save Search</button>
+                <button mat-stroked-button (click)="openDialog()">Save Search</button>
                 <button mat-stroked-button>Export Data</button>
             </div>
 
@@ -101,9 +101,20 @@
                         <p>{{log.Endpoint}}</p>
                         <p class="logId">{{log.LogId}}</p>
                     </div>
-                    <p>{{log.HasException}}</p>
-                    <p>{{log.CalledAt}}</p>
-                    <p>{{log.Duration}}</p>
+                    <mat-chip-set>
+                        <mat-chip-option disabled>
+                            Date Start: {{(log.CalledAt | dateFormat)}}
+                        </mat-chip-option>
+                        <mat-chip-option disabled>
+                            Date End: {{(log.EndedAt | dateFormat)}}
+                        </mat-chip-option>
+                        <mat-chip-option disabled>
+                            Duration: {{(log.Duration)}}
+                        </mat-chip-option>
+                        <mat-chip-option disabled>
+                            Has Exception: {{log.HasException}}
+                        </mat-chip-option>
+                    </mat-chip-set>
                 </div>
             </div>
 
@@ -113,3 +124,19 @@
         </div>
     </div>
 </div>
+
+<ng-template #saveSearchDialog let-dialogRef>
+    <h2 mat-dialog-title>Save Search Filters</h2>
+    <mat-dialog-content class="mat-typography">
+        <mat-form-field class="save-filter-input">
+            <mat-label>Filter Name</mat-label>
+            <input [formControl]="searchFilterName" matInput cdkFocusInitial>
+        </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <div class="buttons-wrapper save-filter-buttons">
+            <button mat-stroked-button (click)="closeDialog(true)">Save</button>
+            <button class="cancel-button" mat-stroked-button (click)="closeDialog(false)">Cancel</button>
+        </div>
+    </mat-dialog-actions>
+</ng-template>

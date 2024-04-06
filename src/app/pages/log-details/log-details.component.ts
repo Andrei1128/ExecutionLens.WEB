@@ -3,11 +3,14 @@ import { Log } from '../../_core/models/Log';
 import mermaid from 'mermaid';
 import Chart from 'chart.js/auto';
 import { MatButton } from '@angular/material/button';
+import { DateFormatPipe } from '../../_core/pipes/DateFormatPipe';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-log-details',
   standalone: true,
-  imports: [MatButton],
+  imports: [MatButton, DateFormatPipe, MatCardModule, MatDividerModule],
   templateUrl: './log-details.component.html',
   styleUrl: './log-details.component.scss',
 })
@@ -16,15 +19,15 @@ export class LogDetailsComponent implements OnInit {
     | ElementRef
     | undefined;
 
-  exceptionsCountChart: any | null = null;
+  methodsExecutionTimeChart: any | null = null;
 
   log: Log | null = null;
 
   ngOnInit() {
     this.initializeSequenceDiagram();
 
-    this.createExceptionsCountChart();
-    this.fetchExceptionsCount();
+    this.createMethodsExecutionTimeChart();
+    this.fetchMethodsExecutionTime();
 
     const sampleInput: object = {
       inputProperty1: 'value1',
@@ -39,6 +42,7 @@ export class LogDetailsComponent implements OnInit {
     };
 
     this.log = {
+      Id: '12sd56435tasd1231',
       Class: 'ExampleClass',
       Method: 'exampleMethod',
       HasException: false,
@@ -54,6 +58,7 @@ export class LogDetailsComponent implements OnInit {
       ],
       Interactions: [
         {
+          Id: '12sd56435tasd1231',
           Class: 'InteractionClass1',
           Method: 'interactionMethod1',
           HasException: false,
@@ -68,6 +73,7 @@ export class LogDetailsComponent implements OnInit {
           Informations: [],
           Interactions: [
             {
+              Id: '12sd56435tasd1231',
               Class: 'ExampleClass',
               Method: 'exampleMethod',
               HasException: false,
@@ -86,6 +92,7 @@ export class LogDetailsComponent implements OnInit {
           ],
         },
         {
+          Id: '12sd56435tasd1231',
           Class: 'InteractionClass2',
           Method: 'interactionMethod2',
           HasException: true,
@@ -194,8 +201,8 @@ export class LogDetailsComponent implements OnInit {
     bindFunctions?.(element);
   }
 
-  createExceptionsCountChart() {
-    this.exceptionsCountChart = new Chart('exceptionsCountChart', {
+  createMethodsExecutionTimeChart() {
+    this.methodsExecutionTimeChart = new Chart('methodsExecutionTimeChart', {
       type: 'doughnut',
       data: {
         labels: [],
@@ -204,7 +211,7 @@ export class LogDetailsComponent implements OnInit {
       options: {
         plugins: {
           title: {
-            text: 'Methods Exception Count',
+            text: 'Methods Execution Time',
             display: true,
             font: {
               size: 14,
@@ -217,25 +224,25 @@ export class LogDetailsComponent implements OnInit {
     });
   }
 
-  fetchExceptionsCount() {
-    this.exceptionsCountChart?.data.datasets.splice(
+  fetchMethodsExecutionTime() {
+    this.methodsExecutionTimeChart?.data.datasets.splice(
       0,
-      this.exceptionsCountChart?.data.datasets.length
+      this.methodsExecutionTimeChart?.data.datasets.length
     );
-    this.exceptionsCountChart?.data.labels?.splice(
+    this.methodsExecutionTimeChart?.data.labels?.splice(
       0,
-      this.exceptionsCountChart?.data.labels?.length
+      this.methodsExecutionTimeChart?.data.labels?.length
     );
 
-    this.exceptionsCountChart?.data.labels?.push(
-      ...this.exceptionsCount.map((x) => x.method)
+    this.methodsExecutionTimeChart?.data.labels?.push(
+      ...this.methodsExecutionTime.map((x) => x.method)
     );
 
-    this.exceptionsCountChart?.data.datasets.push({
-      data: this.exceptionsCount.map((x) => x.value),
+    this.methodsExecutionTimeChart?.data.datasets.push({
+      data: this.methodsExecutionTime.map((x) => x.value),
     });
 
-    this.exceptionsCountChart?.update();
+    this.methodsExecutionTimeChart?.update();
   }
 
   controllerList: string[] = [
@@ -248,7 +255,7 @@ export class LogDetailsComponent implements OnInit {
 
   endpointList: string[] = ['user', 'product', 'order', 'payment', 'cart'];
 
-  exceptionsCount = [
+  methodsExecutionTime = [
     {
       method: 'CalculateMedian',
       value: 15,

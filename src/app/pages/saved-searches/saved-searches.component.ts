@@ -3,11 +3,21 @@ import { CommonModule } from '@angular/common';
 import { SavedSearch } from '../../_core/models/SavedSearch';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { DateFormatPipe } from '../../_core/pipes/DateFormatPipe';
+import { RouterModule } from '@angular/router';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-saved-searches',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    DateFormatPipe,
+    MatChipsModule,
+    RouterModule,
+  ],
   templateUrl: './saved-searches.component.html',
   styleUrl: './saved-searches.component.scss',
 })
