@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SharedModule } from '../../_core/modules/shared.module';
 import Chart from 'chart.js/auto';
 import {
   FormGroup,
@@ -7,11 +6,22 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-requests',
   standalone: true,
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatNativeDateModule,
+  ],
   templateUrl: './requests.component.html',
   styleUrl: './requests.component.scss',
 })

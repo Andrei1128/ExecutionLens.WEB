@@ -1,5 +1,4 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { SharedModule } from '../../_core/modules/shared.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatInputModule } from '@angular/material/input';
@@ -26,6 +25,10 @@ import {
 } from '@angular/material/dialog';
 import { Filter } from '../../_core/models/SearchFilter';
 import { LogOverview } from '../../_core/models/LogOverview';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-search',
@@ -34,7 +37,6 @@ import { LogOverview } from '../../_core/models/LogOverview';
   styleUrl: './search.component.scss',
   imports: [
     MatIcon,
-    SharedModule,
     FormsModule,
     ReactiveFormsModule,
     MatCheckboxModule,
@@ -50,6 +52,10 @@ import { LogOverview } from '../../_core/models/LogOverview';
     MatDialogActions,
     MatDialogClose,
     MatDialogTitle,
+    MatDatepickerModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatNativeDateModule,
   ],
 })
 export class SearchComponent implements OnInit {

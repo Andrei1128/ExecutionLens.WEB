@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SharedModule } from '../../_core/modules/shared.module';
 import Chart from 'chart.js/auto';
 import {
   FormGroup,
@@ -12,12 +11,15 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { Exception } from '../../_core/models/Exception';
 import { DateFormatPipe } from '../../_core/pipes/DateFormatPipe';
 import { RouterModule } from '@angular/router';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-exceptions',
   standalone: true,
   imports: [
-    SharedModule,
     FormsModule,
     ReactiveFormsModule,
     NgFor,
@@ -25,6 +27,10 @@ import { RouterModule } from '@angular/router';
     MatPaginatorModule,
     DateFormatPipe,
     RouterModule,
+    MatDatepickerModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatNativeDateModule,
   ],
   templateUrl: './exceptions.component.html',
   styleUrl: './exceptions.component.scss',

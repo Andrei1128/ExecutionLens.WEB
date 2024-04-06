@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { SharedModule } from '../../_core/modules/shared.module';
 import Chart from 'chart.js/auto';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
 import {
   FormGroup,
   FormControl,
@@ -11,7 +14,14 @@ import {
 @Component({
   selector: 'app-time',
   standalone: true,
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    MatButtonModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './time.component.html',
   styleUrl: './time.component.scss',
 })

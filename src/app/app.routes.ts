@@ -3,52 +3,54 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    loadChildren: () =>
-      import('./pages/dashboard/dashboard.module').then(
-        (m) => m.DashboardModule
+    loadComponent: () =>
+      import('./pages/dashboard/dashboard.component').then(
+        (m) => m.DashboardComponent
       ),
   },
   {
     path: 'search',
-    loadChildren: () =>
-      import('./pages/search/search.module').then((m) => m.SearchModule),
+    loadComponent: () =>
+      import('./pages/search/search.component').then((m) => m.SearchComponent),
   },
   {
     path: 'exceptions',
-    loadChildren: () =>
-      import('./pages/exceptions/exceptions.module').then(
-        (m) => m.ExceptionsModule
+    loadComponent: () =>
+      import('./pages/exceptions/exceptions.component').then(
+        (m) => m.ExceptionsComponent
       ),
   },
   {
     path: 'predictions',
-    loadChildren: () =>
-      import('./pages/predictions/predictions.module').then(
-        (m) => m.PredictionsModule
+    loadComponent: () =>
+      import('./pages/predictions/predictions.component').then(
+        (m) => m.PredictionsComponent
       ),
   },
   {
     path: 'saved-searches',
-    loadChildren: () =>
-      import('./pages/saved-searches/saved-searches.module').then(
-        (m) => m.SavedSearchesModule
+    loadComponent: () =>
+      import('./pages/saved-searches/saved-searches.component').then(
+        (m) => m.SavedSearchesComponent
       ),
   },
   {
     path: 'requests',
-    loadChildren: () =>
-      import('./pages/requests/requests.module').then((m) => m.RequestsModule),
+    loadComponent: () =>
+      import('./pages/requests/requests.component').then(
+        (m) => m.RequestsComponent
+      ),
   },
   {
     path: 'time',
-    loadChildren: () =>
-      import('./pages/time/time.module').then((m) => m.TimeModule),
+    loadComponent: () =>
+      import('./pages/time/time.component').then((m) => m.TimeComponent),
   },
   {
     path: 'log-details',
-    loadChildren: () =>
-      import('./pages/log-details/log-details.module').then(
-        (m) => m.LogDetailsModule
+    loadComponent: () =>
+      import('./pages/log-details/log-details.component').then(
+        (m) => m.LogDetailsComponent
       ),
   },
   {
