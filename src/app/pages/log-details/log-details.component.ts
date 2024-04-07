@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Log } from '../../_core/models/Log';
 import mermaid from 'mermaid';
 import Chart from 'chart.js/auto';
@@ -6,13 +12,8 @@ import { MatButton } from '@angular/material/button';
 import { DateFormatPipe } from '../../_core/pipes/DateFormatPipe';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
-import {
-  PanZoomConfig,
-  PanZoomAPI,
-  PanZoomModel,
-  PanZoomConfigOptions,
-  PanZoomComponent,
-} from 'ngx-panzoom';
+import { PanZoomConfig, PanZoomAPI, PanZoomComponent, Rect } from 'ngx-panzoom';
+import { Point } from 'ngx-panzoom/lib/types/point';
 
 @Component({
   selector: 'app-log-details',
@@ -27,25 +28,46 @@ import {
   templateUrl: './log-details.component.html',
   styleUrl: './log-details.component.scss',
 })
-export class LogDetailsComponent implements OnInit {
+export class LogDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('sequenceDiagramDiv') sequenceDiagramElement:
     | ElementRef
     | undefined;
 
   methodsExecutionTimeChart: any | null = null;
+  log: Log | null = null;
 
   panZoomConfig: PanZoomConfig = new PanZoomConfig({
-    freeMouseWheelFactor: 0.001,
     zoomLevels: 10,
-    neutralZoomLevel: -0.1,
+    scalePerZoomLevel: 1.5,
+    neutralZoomLevel: -2,
     zoomOnMouseWheel: false,
     zoomOnDoubleClick: false,
     friction: 100,
+    dynamicContentDimensions: true,
   });
 
-  log: Log | null = null;
+  @ViewChild('panzoomElement') panzoomElement: ElementRef | undefined;
+  private panZoomAPI: PanZoomAPI | undefined;
+
+  ngAfterViewInit(): void {
+    const width = this.panzoomElement?.nativeElement.offsetWidth;
+    const height = this.panzoomElement?.nativeElement.offsetHeight;
+
+    const point: Point = { x: width / 9.5, y: height / 12 };
+    this.panZoomAPI?.panToPoint(point);
+
+    this.panzoomElement?.nativeElement.addEventListener(
+      'wheel',
+      this.zoomHandler.bind(this),
+      { passive: false }
+    );
+  }
 
   ngOnInit() {
+    this.panZoomConfig.api.subscribe(
+      (api: PanZoomAPI) => (this.panZoomAPI = api)
+    );
+
     this.initializeSequenceDiagram();
 
     this.createMethodsExecutionTimeChart();
@@ -169,6 +191,17 @@ export class LogDetailsComponent implements OnInit {
     this.log.Interactions[1].Output = interaction2Output;
   }
 
+  zoomHandler(event: WheelEvent) {
+    if (event.shiftKey) {
+      if (event.deltaY > 0) {
+        this.panZoomAPI?.zoomOut();
+      } else {
+        this.panZoomAPI?.zoomIn();
+      }
+      event.preventDefault();
+    }
+  }
+
   async initializeSequenceDiagram(): Promise<void> {
     const theme = `
       %%{
@@ -191,15 +224,6 @@ export class LogDetailsComponent implements OnInit {
 
     const graphDefinition = `
     sequenceDiagram
-    actor ASs
-    actor ASs2
-    actor ASs3
-    actor ASs4
-    actor ASs5
-    actor ASs6
-    actor ASs44
-    actor ASs52
-    actor ASs61
     actor Alice
     actor Bob
     Alice->>Bob: Hi Bob
@@ -210,24 +234,6 @@ export class LogDetailsComponent implements OnInit {
     Bob->>Alice: Fine, thank you. And you?
     create participant Carl
     Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
-    Alice->>Carl: Hi Carl!
     create actor D as Donald
     Carl->>D: Hi!
     destroy Carl
@@ -237,9 +243,7 @@ export class LogDetailsComponent implements OnInit {
     Alice->>+John: Hello John, how are you?
     Alice->>+John: John, can you hear me?
     John-->>-Alice: Hi Alice, I can hear you!
-    John-->>-Alice: I feel great!
-    create actor A as Andrei
-    create actor S as Sa`;
+    John-->>-Alice: I feel great!`;
 
     const { svg, bindFunctions } = await mermaid.render(
       'sequenceDiagramSvg',
