@@ -1,12 +1,16 @@
 .search-accordion {
-    width: 40rem;
+    width: 56rem;
 
     position: relative;
 }
 
+.search-header {
+    display: flex;
+    gap: 2rem;
+}
+
 .search-bar {
-    width: 100%;
-    position: relative;
+    width: 40rem;
 
     input {
         padding-right: 6rem;
@@ -14,10 +18,8 @@
 }
 
 .add-btn {
-    position: absolute;
-    top: 0rem;
-    right: -3rem;
-    padding: 0rem;
+    padding: 0.7rem 1.2rem;
+    text-wrap: nowrap;
 }
 
 .search-body {

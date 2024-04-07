@@ -12,7 +12,7 @@ import { MatButton } from '@angular/material/button';
 import { DateFormatPipe } from '../../_core/pipes/DateFormatPipe';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
-import { PanZoomConfig, PanZoomAPI, PanZoomComponent, Rect } from 'ngx-panzoom';
+import { PanZoomConfig, PanZoomAPI, PanZoomComponent } from 'ngx-panzoom';
 import { Point } from 'ngx-panzoom/lib/types/point';
 
 @Component({
@@ -52,15 +52,28 @@ export class LogDetailsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     const width = this.panzoomElement?.nativeElement.offsetWidth;
     const height = this.panzoomElement?.nativeElement.offsetHeight;
-
     const point: Point = { x: width / 9.5, y: height / 12 };
     this.panZoomAPI?.panToPoint(point);
-
     this.panzoomElement?.nativeElement.addEventListener(
       'wheel',
       this.zoomHandler.bind(this),
       { passive: false }
     );
+  }
+
+  addDiagramMethodInputOutput() {
+    var messageTextElements = document.getElementsByClassName('messageText');
+
+    for (var i = 0; i < messageTextElements.length; i++) {
+      var element = messageTextElements[i] as HTMLElement;
+      element.style.cursor = 'pointer';
+      element.textContent = 'MethodName';
+      element.setAttribute('popover', 'myPopover');
+
+      element.addEventListener('click', function () {
+        console.log('Element clicked!');
+      });
+    }
   }
 
   ngOnInit() {
@@ -245,6 +258,10 @@ export class LogDetailsComponent implements OnInit, AfterViewInit {
     John-->>-Alice: Hi Alice, I can hear you!
     John-->>-Alice: I feel great!`;
 
+    mermaid.initialize({
+      securityLevel: 'loose',
+    });
+
     const { svg, bindFunctions } = await mermaid.render(
       'sequenceDiagramSvg',
       theme + graphDefinition
@@ -254,6 +271,8 @@ export class LogDetailsComponent implements OnInit, AfterViewInit {
 
     element.innerHTML = svg;
     bindFunctions?.(element);
+
+    this.addDiagramMethodInputOutput();
   }
 
   createMethodsExecutionTimeChart() {

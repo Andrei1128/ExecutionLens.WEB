@@ -7,12 +7,12 @@
                         <div class="search-accordion">
                             <div class="search-header">
                                 <mat-form-field class="search-bar">
-                                    <mat-label>Search</mat-label>
+                                    <mat-label>Filter</mat-label>
                                     <input [formControl]="searchBar" [disabled]="searchByIdActive" matInput>
-                                    <button (click)="addAdvancedFilter()" [disabled]="emptySearch || searchByIdActive"
-                                        *ngIf="(!emptySearch) && !searchByIdActive" class="add-btn"
-                                        mat-stroked-button>Add</button>
                                 </mat-form-field>
+                                <button (click)="addAdvancedFilter()" [disabled]="emptySearch || searchByIdActive"
+                                    *ngIf="(!emptySearch) && !searchByIdActive" class="add-btn" mat-stroked-button>Add
+                                    Filter</button>
                             </div>
                             <mat-radio-group [formControl]="radioButtonGroup"
                                 [disabled]="emptySearch || searchByIdActive" class="search-body"
