@@ -2,6 +2,8 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  HostListener,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -14,21 +16,25 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { PanZoomConfig, PanZoomAPI, PanZoomComponent } from 'ngx-panzoom';
 import { Point } from 'ngx-panzoom/lib/types/point';
+import { PopoverComponent } from '../../shared/popover/popover.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-log-details',
   standalone: true,
+  templateUrl: './log-details.component.html',
+  styleUrl: './log-details.component.scss',
   imports: [
     MatButton,
     DateFormatPipe,
     MatCardModule,
     MatDividerModule,
     PanZoomComponent,
+    PopoverComponent,
+    NgIf,
   ],
-  templateUrl: './log-details.component.html',
-  styleUrl: './log-details.component.scss',
 })
-export class LogDetailsComponent implements OnInit, AfterViewInit {
+export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sequenceDiagramDiv') sequenceDiagramElement:
     | ElementRef
     | undefined;
@@ -61,22 +67,58 @@ export class LogDetailsComponent implements OnInit, AfterViewInit {
     );
   }
 
+  ngOnDestroy() {
+    document.body.removeEventListener(
+      'click',
+      this.handleOutsideClick.bind(this)
+    );
+    document.body.removeEventListener('wheel', this.hidePopover.bind(this));
+  }
+
   addDiagramMethodInputOutput() {
     var messageTextElements = document.getElementsByClassName('messageText');
 
     for (var i = 0; i < messageTextElements.length; i++) {
       var element = messageTextElements[i] as HTMLElement;
       element.style.cursor = 'pointer';
-      element.textContent = 'MethodName';
-      element.setAttribute('popover', 'myPopover');
 
-      element.addEventListener('click', function () {
-        console.log('Element clicked!');
-      });
+      element.addEventListener('click', (event) => this.showPopover(event));
     }
   }
 
+  showPopoverFlag: boolean = false;
+  popoverX: number = 0;
+  popoverY: number = 0;
+  popoverContent: string = '';
+
+  showPopover(event: MouseEvent) {
+    this.showPopoverFlag = true;
+    this.popoverX = event.clientX + 30;
+    this.popoverY = event.clientY - 10;
+    this.popoverContent = 'Method Input/Output';
+
+    event.stopPropagation();
+  }
+
+  hidePopover() {
+    this.showPopoverFlag = false;
+  }
+
+  handleOutsideClick(event: MouseEvent) {
+    if (!this.isClickedElementInsidePopover(event.target as HTMLElement)) {
+      this.hidePopover();
+    }
+  }
+
+  private isClickedElementInsidePopover(clickedElement: HTMLElement): boolean {
+    const popoverElement = document.querySelector('app-popover') as HTMLElement;
+    return popoverElement?.contains(clickedElement);
+  }
+
   ngOnInit() {
+    document.body.addEventListener('wheel', this.hidePopover.bind(this));
+    document.body.addEventListener('click', this.handleOutsideClick.bind(this));
+
     this.panZoomConfig.api.subscribe(
       (api: PanZoomAPI) => (this.panZoomAPI = api)
     );
