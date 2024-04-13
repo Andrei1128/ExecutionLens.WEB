@@ -2,8 +2,17 @@
     position: absolute;
     background-color: var(--btn-primary);
     border: 1px solid var(--main-border);
+    max-width: 40rem;
+    max-height: 20rem;
     padding: 0.7rem 1rem;
     border-radius: 0.3rem;
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
     z-index: 999;
+    overflow-y: scroll !important;
+
+    pre {
+        color: rgba(255, 255, 255, 0.9);
+        word-wrap: break-word;
+        white-space: pre-wrap;
+    }
 }

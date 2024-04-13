@@ -1,17 +1,20 @@
 export interface Log {
-  Id: string;
+  class: string;
+  method: string;
+  entryTime: Date;
+  exitTime: Date;
+  inputTypes?: string[];
+  input?: any[];
+  outputType?: string | null;
+  output?: any | null;
+  informations: InformationLog[];
+  interactions: Log[];
+  hasException: boolean;
+}
 
-  Class: string;
-  Method: string;
-
-  HasException: boolean;
-
-  EntryTime: Date;
-  ExitTime: Date;
-
-  Input: object;
-  Output: object;
-
-  Interactions: Log[];
-  Informations: string[];
+export interface InformationLog {
+  timestamp: Date;
+  logLevel?: string | null;
+  message?: string | null;
+  exception?: Error | null;
 }

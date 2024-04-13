@@ -6,19 +6,21 @@
             </div>
             <mat-card>
                 <div class="log-overview">
-                    <p><span class="row-header">Id:</span> <span>{{log?.Id}}</span></p>
+                    <p><span class="row-header">Id:</span> <span>{{logId}}</span></p>
                     <mat-divider></mat-divider>
-                    <p><span class="row-header">Controller:</span> <span>{{log?.Class}}</span></p>
+                    <p><span class="row-header">Controller:</span> <span>{{getControllerName(log?.class)}}</span></p>
                     <mat-divider></mat-divider>
-                    <p><span class="row-header">Endpoint:</span> <span>{{log?.Method}}</span></p>
+                    <p><span class="row-header">Endpoint:</span> <span>{{log?.method}}</span></p>
                     <mat-divider></mat-divider>
                     <p><span class="row-header">Has exception:</span> <span>{{true}}</span></p>
                     <mat-divider></mat-divider>
-                    <p><span class="row-header">Called at:</span> <span>{{log?.EntryTime | dateFormat}}</span></p>
+                    <p><span class="row-header">Called at:</span> <span>{{log?.entryTime | dateFormat}}</span></p>
                     <mat-divider></mat-divider>
-                    <p><span class="row-header">Ended at:</span> <span>{{log?.ExitTime | dateFormat}}</span></p>
+                    <p><span class="row-header">Ended at:</span> <span>{{log?.exitTime | dateFormat}}</span></p>
                     <mat-divider></mat-divider>
-                    <p><span class="row-header">Duration:</span> <span>{{'00:00:23:123135123Z'}}</span></p>
+                    <p><span class="row-header">Duration:</span>
+                        <span>{{toTimeFormat(getTimeDifference(log?.entryTime,log?.exitTime))}}</span>
+                    </p>
                 </div>
             </mat-card>
         </div>

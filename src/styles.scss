@@ -161,13 +161,18 @@ div.mat-mdc-select-panel {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'roboto-mono', monospace;
     font-size: 14px;
     line-height: 20px;
 }
 
+span {
+    font-family: 'roboto-mono', monospace !important;
+}
+
 html,
 body {
+    overflow: hidden;
     background-color: var(--second-background);
     height: 100%;
 }
