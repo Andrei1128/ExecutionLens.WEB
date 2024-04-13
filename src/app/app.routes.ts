@@ -21,13 +21,6 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'predictions',
-    loadComponent: () =>
-      import('./pages/predictions/predictions.component').then(
-        (m) => m.PredictionsComponent
-      ),
-  },
-  {
     path: 'saved-searches',
     loadComponent: () =>
       import('./pages/saved-searches/saved-searches.component').then(

@@ -14,7 +14,7 @@
                         </mat-chip-option>
                         <mat-chip-option *ngIf="search.Search.Endpoints != null && search.Search.Endpoints.length > 0"
                             disabled>
-                            Endpoints: {{search.Search.Endpoints.toString().replace(',',', ')}}
+                            Methods: {{search.Search.Endpoints.toString().replace(',',', ')}}
                         </mat-chip-option>
                         <mat-chip-option *ngIf="search.Search.DateStart != null" disabled>
                             Date start: {{(search.Search.DateStart | dateFormat).split(' ')[0]}}

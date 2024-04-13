@@ -179,8 +179,8 @@ export class SearchComponent implements OnInit {
   ];
 
   orderOptions: any[] = [
-    { value: 0, viewValue: 'ASC' },
-    { value: 1, viewValue: 'DESC' },
+    { value: 0, viewValue: 'Date ASC' },
+    { value: 1, viewValue: 'Date DESC' },
   ];
 
   endpointList: string[] = ['user', 'product', 'order', 'payment', 'cart'];
