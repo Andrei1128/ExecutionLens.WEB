@@ -1,77 +1,45 @@
 <div class="component-container">
     <div class="cards-wrapper">
         <div class="card">
-            <form class="filters" [formGroup]="endpointsFilters" (submit)="fetchEndpointsExecutionTime()">
+            <form class="filters" [formGroup]="filters" (submit)="fetchMethodsExecutionTime()">
                 <div class="form">
                     <mat-form-field>
                         <mat-label>Enter a date range</mat-label>
-                        <mat-date-range-input [rangePicker]="endpointsPicker">
+                        <mat-date-range-input [rangePicker]="picker">
                             <input matStartDate formControlName="dateStart" placeholder="Start date">
                             <input matEndDate formControlName="dateEnd" placeholder="End date">
                         </mat-date-range-input>
                         <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
-                        <mat-datepicker-toggle matIconSuffix [for]="endpointsPicker"></mat-datepicker-toggle>
-                        <mat-date-range-picker #endpointsPicker></mat-date-range-picker>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
                     </mat-form-field>
 
-                    <mat-form-field>
-                        <mat-label>Select controllers</mat-label>
-                        <mat-select multiple>
-                            @for (controller of controllerList; track controller) {
-                            <mat-option [value]="controller">{{controller}}</mat-option> }
+                    <mat-form-field (click)="getClassNames()">
+                        <mat-label *ngIf="isClassNamesLoading; else classElseBlock">Loading classes..</mat-label>
+                        <ng-template #classElseBlock> <mat-label>Select classes</mat-label></ng-template>
+                        <mat-select #classSelect multiple formControlName="controllers">
+                            <ng-container *ngFor="let controller of controllerList; ">
+                                <mat-option *ngIf="!isClassNamesLoading" [value]="controller">
+                                    {{ controller.split(",")[0].split(".")[2] }}
+                                </mat-option>
+                            </ng-container>
                         </mat-select>
                     </mat-form-field>
 
-                    <mat-form-field>
-                        <mat-label>Select methods</mat-label>
-                        <mat-select multiple>
-                            @for (endpoint of endpointList; track endpoint) {
-                            <mat-option [value]="endpoint">{{endpoint}}</mat-option> }
+                    <mat-form-field (click)="getMethodNames()">
+                        <mat-label *ngIf="isMethodNamesLoading; else methodElseBlock">Loading methods..</mat-label>
+                        <ng-template #methodElseBlock> <mat-label>Select methods</mat-label></ng-template>
+                        <mat-select multiple formControlName="endpoints">
+                            <ng-container *ngFor="let endpoint of endpointList; ">
+                                <mat-option *ngIf="!isMethodNamesLoading" [value]="endpoint">{{ endpoint }}</mat-option>
+                            </ng-container>
                         </mat-select>
                     </mat-form-field>
                 </div>
 
                 <button mat-stroked-button>Fetch</button>
             </form>
-            <div class="chart-wrapper">
-                <canvas id="endpointsExecutionTimeChart">{{endpointsExecutionTimeChart}}</canvas>
-            </div>
-        </div>
-    </div>
-    <div class="cards-wrapper">
-        <div class="card">
-            <form class="filters" [formGroup]="methodsFilters" (submit)="fetchMethodsExecutionTime()">
-                <div class="form">
-                    <mat-form-field>
-                        <mat-label>Enter a date range</mat-label>
-                        <mat-date-range-input [rangePicker]="methodPicker">
-                            <input matStartDate formControlName="dateStart" placeholder="Start date">
-                            <input matEndDate formControlName="dateEnd" placeholder="End date">
-                        </mat-date-range-input>
-                        <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
-                        <mat-datepicker-toggle matIconSuffix [for]="methodPicker"></mat-datepicker-toggle>
-                        <mat-date-range-picker #methodPicker></mat-date-range-picker>
-                    </mat-form-field>
 
-                    <mat-form-field>
-                        <mat-label>Select controllers</mat-label>
-                        <mat-select multiple>
-                            @for (controller of controllerList; track controller) {
-                            <mat-option [value]="controller">{{controller}}</mat-option> }
-                        </mat-select>
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <mat-label>Select endpoints</mat-label>
-                        <mat-select multiple>
-                            @for (endpoint of endpointList; track endpoint) {
-                            <mat-option [value]="endpoint">{{endpoint}}</mat-option> }
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-
-                <button mat-stroked-button>Fetch</button>
-            </form>
             <div class="chart-wrapper">
                 <canvas id="methodsExecutionTimeChart">{{methodsExecutionTimeChart}}</canvas>
             </div>

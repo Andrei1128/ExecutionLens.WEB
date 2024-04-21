@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import Chart from 'chart.js/auto';
 import {
   FormGroup,
@@ -7,14 +7,19 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
+import { LogService } from '../../_core/services/log.service';
+import { RequestCount } from '../../_core/models/RequestCount';
+import { NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-requests',
   standalone: true,
   imports: [
+    NgFor,
+    NgIf,
     FormsModule,
     ReactiveFormsModule,
     MatDatepickerModule,
@@ -27,6 +32,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 })
 export class RequestsComponent implements OnInit {
   requestsCountChart: Chart | null = null;
+  requestsCount: RequestCount[] = [];
+
+  controllerList: string[] = ['none'];
+  endpointList: string[] = ['none'];
 
   filters = new FormGroup({
     dateStart: new FormControl<Date | null>(null),
@@ -35,9 +44,32 @@ export class RequestsComponent implements OnInit {
     endpoints: new FormControl(),
   });
 
+  isClassNamesLoading: boolean = false;
+  isMethodNamesLoading: boolean = false;
+
+  constructor(private logService: LogService) {}
+
   ngOnInit() {
     this.createRequestsCountChart();
     this.fetchRequestsCount();
+  }
+
+  getClassNames() {
+    this.isClassNamesLoading = true;
+    this.logService.getClassNames().subscribe((data) => {
+      this.filters.controls.endpoints.reset();
+      this.controllerList = data;
+      this.isClassNamesLoading = false;
+    });
+  }
+
+  getMethodNames() {
+    this.isMethodNamesLoading = true;
+    const classNames = this.filters.controls.controllers.value ?? [];
+    this.logService.getMethodNames(classNames).subscribe((data) => {
+      this.endpointList = data;
+      this.isMethodNamesLoading = false;
+    });
   }
 
   createRequestsCountChart() {
@@ -67,69 +99,26 @@ export class RequestsComponent implements OnInit {
   }
 
   fetchRequestsCount() {
-    this.requestsCountChart?.data.datasets.splice(
-      0,
-      this.requestsCountChart?.data.datasets.length
-    );
-    this.requestsCountChart?.data.labels?.splice(
-      0,
-      this.requestsCountChart?.data.labels?.length
-    );
+    this.logService.getRequestsCount().subscribe((data) => {
+      this.requestsCount = data;
+      this.requestsCountChart?.data.datasets.splice(
+        0,
+        this.requestsCountChart?.data.datasets.length
+      );
+      this.requestsCountChart?.data.labels?.splice(
+        0,
+        this.requestsCountChart?.data.labels?.length
+      );
 
-    this.requestsCountChart?.data.labels?.push(
-      ...this.requestsCount.map((x) => x.method)
-    );
+      this.requestsCountChart?.data.labels?.push(
+        ...this.requestsCount.map((x) => x.method)
+      );
 
-    this.requestsCountChart?.data.datasets.push({
-      data: this.requestsCount.map((x) => x.avg),
+      this.requestsCountChart?.data.datasets.push({
+        data: this.requestsCount.map((x) => x.count),
+      });
+
+      this.requestsCountChart?.update();
     });
-
-    this.requestsCountChart?.update();
   }
-
-  controllerList: string[] = [
-    'UserController',
-    'ProductController',
-    'OrderController',
-    'PaymentController',
-    'CartController',
-  ];
-
-  endpointList: string[] = ['user', 'product', 'order', 'payment', 'cart'];
-
-  requestsCount = [
-    {
-      method: 'CalculateMedian',
-      avg: 15,
-    },
-    {
-      method: 'ComputeFactorial',
-      avg: 10,
-    },
-    {
-      method: 'GeneratePrimeNumbers',
-
-      avg: 75,
-    },
-    {
-      method: 'FindRoot',
-
-      avg: 35,
-    },
-    {
-      method: 'CalculateExponential',
-
-      avg: 50,
-    },
-    {
-      method: 'FindLargestPalindrome',
-
-      avg: 20,
-    },
-    {
-      method: 'CalculateStandardDeviation',
-
-      avg: 12,
-    },
-  ];
 }

@@ -8,18 +8,22 @@ import {
 } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { Exception } from '../../_core/models/Exception';
 import { DateFormatPipe } from '../../_core/pipes/DateFormatPipe';
 import { RouterModule } from '@angular/router';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
+import { LogService } from '../../_core/services/log.service';
+import { ExceptionsCount } from '../../_core/models/ExceptionsCount';
+import { MethodException } from '../../_core/models/MethodException';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-exceptions',
   standalone: true,
   imports: [
+    JsonPipe,
     FormsModule,
     ReactiveFormsModule,
     NgFor,
@@ -37,8 +41,12 @@ import { MatNativeDateModule } from '@angular/material/core';
 })
 export class ExceptionsComponent implements OnInit {
   exceptionsCountChart: any | null = null;
-  exceptions: Exception[] = [];
-  exceptionsDetailsMethod: string | null = null;
+  exceptions: MethodException[] = [];
+  exceptionsDetailsMethod: string = 'Latest';
+  exceptionsCount: ExceptionsCount[] = [];
+
+  controllerList: string[] = ['none'];
+  endpointList: string[] = ['none'];
 
   filters = new FormGroup({
     dateStart: new FormControl<Date | null>(null),
@@ -47,24 +55,36 @@ export class ExceptionsComponent implements OnInit {
     endpoints: new FormControl(),
   });
 
+  isClassNamesLoading: boolean = false;
+  isMethodNamesLoading: boolean = false;
+
+  constructor(private logService: LogService) {}
+
   ngOnInit() {
     this.createExceptionsCountChart();
     this.fetchExceptionsCount();
 
-    this.exceptions = [
-      {
-        LogId: '1asd345t123asd',
-        Method: 'SavedSearch1',
-        OccuredAt: new Date(),
-        StackTrace: 'Error: Cannot read property "id" of undefined',
-      },
-      {
-        LogId: '1asd345t123asd',
-        Method: 'SavedSearch2',
-        OccuredAt: new Date(),
-        StackTrace: 'Error: Cannot read property "id" of undefined',
-      },
-    ];
+    this.logService.getMethodExceptions('', '').subscribe((data) => {
+      this.exceptions = data;
+    });
+  }
+
+  getClassNames() {
+    this.isClassNamesLoading = true;
+    this.logService.getClassNames().subscribe((data) => {
+      this.filters.controls.endpoints.reset();
+      this.controllerList = data;
+      this.isClassNamesLoading = false;
+    });
+  }
+
+  getMethodNames() {
+    this.isMethodNamesLoading = true;
+    const classNames = this.filters.controls.controllers.value ?? [];
+    this.logService.getMethodNames(classNames).subscribe((data) => {
+      this.endpointList = data;
+      this.isMethodNamesLoading = false;
+    });
   }
 
   createExceptionsCountChart() {
@@ -83,6 +103,11 @@ export class ExceptionsComponent implements OnInit {
           if (item.length > 0) {
             this.exceptionsDetailsMethod =
               this.exceptionsCountChart.data.labels[item[0].index];
+            this.logService
+              .getMethodExceptions('', this.exceptionsDetailsMethod)
+              .subscribe((data) => {
+                this.exceptions = data;
+              });
           }
         },
         plugins: {
@@ -101,64 +126,27 @@ export class ExceptionsComponent implements OnInit {
   }
 
   fetchExceptionsCount() {
-    this.exceptionsCountChart?.data.datasets.splice(
-      0,
-      this.exceptionsCountChart?.data.datasets.length
-    );
-    this.exceptionsCountChart?.data.labels?.splice(
-      0,
-      this.exceptionsCountChart?.data.labels?.length
-    );
+    this.logService.getExceptionsCount().subscribe((data) => {
+      this.exceptionsCount = data;
 
-    this.exceptionsCountChart?.data.labels?.push(
-      ...this.exceptionsCount.map((x) => x.method)
-    );
+      this.exceptionsCountChart?.data.datasets.splice(
+        0,
+        this.exceptionsCountChart?.data.datasets.length
+      );
+      this.exceptionsCountChart?.data.labels?.splice(
+        0,
+        this.exceptionsCountChart?.data.labels?.length
+      );
 
-    this.exceptionsCountChart?.data.datasets.push({
-      data: this.exceptionsCount.map((x) => x.value),
+      this.exceptionsCountChart?.data.labels?.push(
+        ...this.exceptionsCount.map((x) => x.method)
+      );
+
+      this.exceptionsCountChart?.data.datasets.push({
+        data: this.exceptionsCount.map((x) => x.count),
+      });
+
+      this.exceptionsCountChart?.update();
     });
-
-    this.exceptionsCountChart?.update();
   }
-
-  controllerList: string[] = [
-    'UserController',
-    'ProductController',
-    'OrderController',
-    'PaymentController',
-    'CartController',
-  ];
-
-  endpointList: string[] = ['user', 'product', 'order', 'payment', 'cart'];
-
-  exceptionsCount = [
-    {
-      method: 'CalculateMedian',
-      value: 15,
-    },
-    {
-      method: 'ComputeFactorial',
-      value: 10,
-    },
-    {
-      method: 'GeneratePrimeNumbers',
-      value: 75,
-    },
-    {
-      method: 'FindRoot',
-      value: 35,
-    },
-    {
-      method: 'CalculateExponential',
-      value: 50,
-    },
-    {
-      method: 'FindLargestPalindrome',
-      value: 20,
-    },
-    {
-      method: 'CalculateStandardDeviation',
-      value: 12,
-    },
-  ];
 }

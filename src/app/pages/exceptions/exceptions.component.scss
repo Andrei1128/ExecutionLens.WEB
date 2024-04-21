@@ -31,6 +31,7 @@
 }
 
 .exception-metadata {
+    flex-wrap: wrap;
     width: 100%;
     font-weight: 600;
     display: flex;
@@ -57,4 +58,9 @@
     &:hover {
         cursor: pointer;
     }
+}
+
+.exception-data {
+    word-wrap: break-word;
+    white-space: pre-wrap;
 }

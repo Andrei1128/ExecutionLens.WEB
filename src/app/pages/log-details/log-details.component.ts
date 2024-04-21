@@ -43,7 +43,7 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   methodsExecutionTimeChart: any | null = null;
 
-  logId: string = 'QsUF144BKAXOlq7ez4RR';
+  logId: string = '4geu_44BSfUmQnkZvXdL';
   log: Log | null = null;
 
   @ViewChild('panzoomElement') panzoomElement: ElementRef | undefined;
@@ -89,6 +89,7 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.logService.getLog(this.logId).subscribe({
       next: (res) => {
+        console.log(res);
         this.log = res;
         this.initializeMethodsExecutionTimeChart().then(
           () => {},
@@ -175,6 +176,15 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     var messageTextElements = document.getElementsByClassName('messageText');
     var messageNoteElements = document.getElementsByClassName('noteText');
 
+    // var actorManLine = document.getElementById('actor0');
+    // if (actorManLine) actorManLine.style.display = 'none';
+
+    // var actorMans = document.getElementsByClassName('actor-man');
+    // for (var i = 0; i < actorMans.length; i++) {
+    //   var element = actorMans[i] as HTMLElement;
+    //   element.style.display = 'none';
+    // }
+
     for (var i = 0; i < messageTextElements.length; i++) {
       var element = messageTextElements[i] as HTMLElement;
       element.style.cursor = 'pointer';
@@ -253,7 +263,9 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       interactions.push({
         interactor: this.getControllerName(lastLog?.class ?? 'Initiator'),
         interactee: this.getControllerName(currentLog?.class),
-        message: `${currentLog?.method}(${currentLog.inputTypes?.join(', ')})`,
+        message: `${currentLog?.method}(${currentLog.inputTypes?.join(
+          ', '
+        )}): ${currentLog?.outputType}`,
         arrow: '->>+',
         note: null,
         timestamp: new Date(currentLog?.entryTime).getTime(),
@@ -326,7 +338,7 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       if (!interaction.note) {
         graphDefinition += `${interaction.interactor}${interaction.arrow}${interaction.interactee}: ${interaction.message}\n`;
       } else {
-        graphDefinition += `Note over ${interaction.interactor}:${interaction.note}\n`;
+        graphDefinition += `Note right of ${interaction.interactor}:${interaction.note}\n`;
       }
     });
 
