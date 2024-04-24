@@ -35,12 +35,21 @@
                             </ng-container>
                         </mat-select>
                     </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Entry point</mat-label>
+                        <mat-select formControlName="isEntryPoint">
+                            <mat-option *ngFor="let entryPoint of ['Any', 'Yes', 'No']" [value]="entryPoint">
+                                {{ entryPoint }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
 
                 <button mat-stroked-button>Fetch</button>
             </form>
 
-            <div class="chart-wrapper">
+            <div class=" chart-wrapper">
                 <canvas id="requestsCountChart">{{requestsCountChart}}</canvas>
             </div>
         </div>

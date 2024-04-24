@@ -13,6 +13,7 @@ import {
 } from '@angular/forms';
 import { LogService } from '../../_core/services/log.service';
 import { ExecutionsTime } from '../../_core/models/ExecutionsTime';
+import { GraphFilters } from '../../_core/models/GraphFilters';
 
 @Component({
   selector: 'app-time',
@@ -42,6 +43,7 @@ export class TimeComponent implements OnInit {
     dateEnd: new FormControl<Date | null>(null),
     controllers: new FormControl(),
     endpoints: new FormControl(),
+    isEntryPoint: new FormControl('Any'),
   });
 
   isClassNamesLoading: boolean = false;
@@ -104,7 +106,15 @@ export class TimeComponent implements OnInit {
   }
 
   fetchMethodsExecutionTime() {
-    this.logService.getExecutionsTime().subscribe((data) => {
+    const filters: GraphFilters = {
+      dateStart: this.filters.controls.dateStart.value,
+      dateEnd: this.filters.controls.dateEnd.value,
+      controllers: this.filters.controls.controllers.value,
+      endpoints: this.filters.controls.endpoints.value,
+      isEntryPoint: this.filters.controls.isEntryPoint.value,
+    };
+
+    this.logService.getExecutionsTime(filters).subscribe((data) => {
       this.methodsExecutionTimes = data;
 
       this.methodsExecutionTimeChart?.data.datasets.splice(

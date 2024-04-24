@@ -35,6 +35,15 @@
                             </ng-container>
                         </mat-select>
                     </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Entry point</mat-label>
+                        <mat-select formControlName="isEntryPoint">
+                            <mat-option *ngFor="let entryPoint of ['Any', 'Yes', 'No']" [value]="entryPoint">
+                                {{ entryPoint }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
 
                 <button mat-stroked-button>Fetch</button>
@@ -56,7 +65,7 @@
                         <p>{{exception.occuredAt | dateFormat}}</p>
                         <p class="logId">{{exception.nodeId}}</p>
                     </div>
-                    <pre class="exception-data">{{exception.exception | json}}</pre>
+                    <pre class="exception-data">{{(exception.exception | json).replaceAll("\\r\\n","\n")}}</pre>
                 </div>
             </div>
 

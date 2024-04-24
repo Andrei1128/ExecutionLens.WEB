@@ -18,6 +18,7 @@ import { LogService } from '../../_core/services/log.service';
 import { ExceptionsCount } from '../../_core/models/ExceptionsCount';
 import { MethodException } from '../../_core/models/MethodException';
 import { JsonPipe } from '@angular/common';
+import { GraphFilters } from '../../_core/models/GraphFilters';
 
 @Component({
   selector: 'app-exceptions',
@@ -53,6 +54,7 @@ export class ExceptionsComponent implements OnInit {
     dateEnd: new FormControl<Date | null>(null),
     controllers: new FormControl(),
     endpoints: new FormControl(),
+    isEntryPoint: new FormControl('Any'),
   });
 
   isClassNamesLoading: boolean = false;
@@ -126,7 +128,15 @@ export class ExceptionsComponent implements OnInit {
   }
 
   fetchExceptionsCount() {
-    this.logService.getExceptionsCount().subscribe((data) => {
+    const filters: GraphFilters = {
+      dateStart: this.filters.controls.dateStart.value,
+      dateEnd: this.filters.controls.dateEnd.value,
+      controllers: this.filters.controls.controllers.value,
+      endpoints: this.filters.controls.endpoints.value,
+      isEntryPoint: this.filters.controls.isEntryPoint.value,
+    };
+
+    this.logService.getExceptionsCount(filters).subscribe((data) => {
       this.exceptionsCount = data;
 
       this.exceptionsCountChart?.data.datasets.splice(

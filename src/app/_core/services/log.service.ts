@@ -6,6 +6,7 @@ import { RequestCount } from '../models/RequestCount';
 import { ExecutionsTime } from '../models/ExecutionsTime';
 import { ExceptionsCount } from '../models/ExceptionsCount';
 import { MethodException } from '../models/MethodException';
+import { GraphFilters } from '../models/GraphFilters';
 
 @Injectable({
   providedIn: 'root',
@@ -23,8 +24,11 @@ export class LogService {
     return this.http.get<string[]>(`${this.uri}/logs/GetClassNames`);
   }
 
-  getRequestsCount(): Observable<RequestCount[]> {
-    return this.http.get<RequestCount[]>(`${this.uri}/logs/GetRequestsCount`);
+  getRequestsCount(filters: GraphFilters): Observable<RequestCount[]> {
+    return this.http.post<RequestCount[]>(
+      `${this.uri}/logs/GetRequestsCount`,
+      filters
+    );
   }
 
   getMethodNames(classNames: string[]): Observable<string[]> {
@@ -34,15 +38,17 @@ export class LogService {
     );
   }
 
-  getExecutionsTime(): Observable<ExecutionsTime[]> {
-    return this.http.get<ExecutionsTime[]>(
-      `${this.uri}/logs/GetExecutionTimes`
+  getExecutionsTime(filters: GraphFilters): Observable<ExecutionsTime[]> {
+    return this.http.post<ExecutionsTime[]>(
+      `${this.uri}/logs/GetExecutionTimes`,
+      filters
     );
   }
 
-  getExceptionsCount(): Observable<ExceptionsCount[]> {
-    return this.http.get<ExceptionsCount[]>(
-      `${this.uri}/logs/GetExceptionsCount`
+  getExceptionsCount(filters: GraphFilters): Observable<ExceptionsCount[]> {
+    return this.http.post<ExceptionsCount[]>(
+      `${this.uri}/logs/GetExceptionsCount`,
+      filters
     );
   }
 

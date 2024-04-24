@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import Chart from 'chart.js/auto';
 import {
   FormGroup,
@@ -7,12 +7,13 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { LogService } from '../../_core/services/log.service';
 import { RequestCount } from '../../_core/models/RequestCount';
 import { NgFor, NgIf } from '@angular/common';
+import { GraphFilters } from '../../_core/models/GraphFilters';
 
 @Component({
   selector: 'app-requests',
@@ -42,6 +43,7 @@ export class RequestsComponent implements OnInit {
     dateEnd: new FormControl<Date | null>(null),
     controllers: new FormControl(),
     endpoints: new FormControl(),
+    isEntryPoint: new FormControl('Any'),
   });
 
   isClassNamesLoading: boolean = false;
@@ -99,7 +101,15 @@ export class RequestsComponent implements OnInit {
   }
 
   fetchRequestsCount() {
-    this.logService.getRequestsCount().subscribe((data) => {
+    const filters: GraphFilters = {
+      dateStart: this.filters.controls.dateStart.value,
+      dateEnd: this.filters.controls.dateEnd.value,
+      controllers: this.filters.controls.controllers.value,
+      endpoints: this.filters.controls.endpoints.value,
+      isEntryPoint: this.filters.controls.isEntryPoint.value,
+    };
+
+    this.logService.getRequestsCount(filters).subscribe((data) => {
       this.requestsCount = data;
       this.requestsCountChart?.data.datasets.splice(
         0,

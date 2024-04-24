@@ -43,7 +43,7 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   methodsExecutionTimeChart: any | null = null;
 
-  logId: string = '4geu_44BSfUmQnkZvXdL';
+  logId: string = 'IUW_C48BtkovZKilw_GJ';
   log: Log | null = null;
 
   @ViewChild('panzoomElement') panzoomElement: ElementRef | undefined;
