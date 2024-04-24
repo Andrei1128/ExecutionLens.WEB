@@ -43,7 +43,7 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   methodsExecutionTimeChart: any | null = null;
 
-  logId: string = 'IUW_C48BtkovZKilw_GJ';
+  logId: string = 'DgsxEY8ByXlb8mAom03u';
   log: Log | null = null;
 
   @ViewChild('panzoomElement') panzoomElement: ElementRef | undefined;
@@ -258,14 +258,20 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (!isCallBack) {
       if (currentLog?.input && currentLog.input.length > 0)
-        content = JSON.stringify(currentLog?.input, null, 2);
+        content = JSON.stringify(
+          currentLog?.input.map((x) => x.value),
+          null,
+          2
+        )
+          .replaceAll('\\r\\n', '\n')
+          .replaceAll('\\"', '"');
 
       interactions.push({
         interactor: this.getControllerName(lastLog?.class ?? 'Initiator'),
         interactee: this.getControllerName(currentLog?.class),
-        message: `${currentLog?.method}(${currentLog.inputTypes?.join(
-          ', '
-        )}): ${currentLog?.outputType}`,
+        message: `${currentLog?.method}(${currentLog.input
+          ?.map((x) => x.type)
+          ?.join(', ')}): ${currentLog?.output?.type}`,
         arrow: '->>+',
         note: null,
         timestamp: new Date(currentLog?.entryTime).getTime(),
@@ -286,16 +292,15 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         });
       });
     } else {
-      if (currentLog?.output)
-        content = JSON.stringify(currentLog?.output, null, 2);
+      if (currentLog?.output) content = currentLog?.output.value;
 
       interactions.push({
         interactor: this.getControllerName(currentLog?.class),
         interactee: this.getControllerName(lastLog?.class ?? 'Initiator'),
         message: `${
           currentLog.hasException === true
-            ? `throwed ${currentLog?.outputType}`
-            : currentLog?.outputType ?? 'void'
+            ? `throwed ${currentLog?.output?.type}`
+            : currentLog?.output?.type ?? 'void'
         } `,
         arrow: '-->>-',
         note: null,
