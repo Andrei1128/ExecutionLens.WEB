@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { DateFormatPipe } from '../../_core/pipes/DateFormatPipe';
 import { RouterModule } from '@angular/router';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -17,14 +17,12 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { LogService } from '../../_core/services/log.service';
 import { ExceptionsCount } from '../../_core/models/ExceptionsCount';
 import { MethodException } from '../../_core/models/MethodException';
-import { JsonPipe } from '@angular/common';
 import { GraphFilters } from '../../_core/models/GraphFilters';
 
 @Component({
   selector: 'app-exceptions',
   standalone: true,
   imports: [
-    JsonPipe,
     FormsModule,
     ReactiveFormsModule,
     NgFor,
@@ -43,6 +41,7 @@ import { GraphFilters } from '../../_core/models/GraphFilters';
 export class ExceptionsComponent implements OnInit {
   exceptionsCountChart: any | null = null;
   exceptions: MethodException[] = [];
+  exceptionsTotalEntries: number = 0;
   exceptionsDetailsMethod: string = 'Latest';
   exceptionsCount: ExceptionsCount[] = [];
 
@@ -67,8 +66,22 @@ export class ExceptionsComponent implements OnInit {
     this.fetchExceptionsCount();
 
     this.logService.getMethodExceptions('', '').subscribe((data) => {
-      this.exceptions = data;
+      this.exceptions = data.exceptions;
+      this.exceptionsTotalEntries = data.totalEntries;
     });
+  }
+
+  handlePageEvent(e: PageEvent) {
+    let methodName: string =
+      this.exceptionsDetailsMethod == 'Latest'
+        ? ''
+        : this.exceptionsDetailsMethod;
+    this.logService
+      .getMethodExceptions('', methodName, e.pageIndex)
+      .subscribe((data) => {
+        this.exceptions = data.exceptions;
+        this.exceptionsTotalEntries = data.totalEntries;
+      });
   }
 
   getClassNames() {
@@ -108,7 +121,8 @@ export class ExceptionsComponent implements OnInit {
             this.logService
               .getMethodExceptions('', this.exceptionsDetailsMethod)
               .subscribe((data) => {
-                this.exceptions = data;
+                this.exceptions = data.exceptions;
+                this.exceptionsTotalEntries = data.totalEntries;
               });
           }
         },

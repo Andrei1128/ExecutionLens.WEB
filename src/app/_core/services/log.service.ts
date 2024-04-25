@@ -5,7 +5,10 @@ import { Log } from '../models/Log';
 import { RequestCount } from '../models/RequestCount';
 import { ExecutionsTime } from '../models/ExecutionsTime';
 import { ExceptionsCount } from '../models/ExceptionsCount';
-import { MethodException } from '../models/MethodException';
+import {
+  MethodException,
+  MethodExceptionsResponse,
+} from '../models/MethodException';
 import { GraphFilters } from '../models/GraphFilters';
 
 @Injectable({
@@ -54,13 +57,15 @@ export class LogService {
 
   getMethodExceptions(
     className: string,
-    methodName: string
-  ): Observable<MethodException[]> {
+    methodName: string,
+    page: number = 0
+  ): Observable<MethodExceptionsResponse> {
     const params = new HttpParams()
       .set('class', className)
-      .set('name', methodName);
+      .set('name', methodName)
+      .set('page', page.toString());
 
-    return this.http.get<MethodException[]>(
+    return this.http.get<MethodExceptionsResponse>(
       `${this.uri}/logs/GetMethodExceptions`,
       { params }
     );

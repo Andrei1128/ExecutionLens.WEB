@@ -61,16 +61,18 @@
             <div routerLink="/log-details" class="exceptions-wrapper" *ngFor="let exception of exceptions">
                 <div class="exception">
                     <div class="exception-metadata">
-                        <p>{{exception.exception.message}}</p>
+                        <p>{{exception.exception.type}}</p>
                         <p>{{exception.occuredAt | dateFormat}}</p>
                         <p class="logId">{{exception.nodeId}}</p>
                     </div>
-                    <pre class="exception-data">{{(exception.exception | json).replaceAll("\\r\\n","\n")}}</pre>
+                    <p class="exception-data">
+                        {{exception.exception.value.replaceAll("\\r\\n","\n")}}
+                    </p>
                 </div>
             </div>
 
-            <mat-paginator [showFirstLastButtons]="true" [hidePageSize]="true" [length]="100" [pageSize]="10"
-                aria-label="Select page">
+            <mat-paginator [showFirstLastButtons]="true" (page)="handlePageEvent($event)" [hidePageSize]="true"
+                [length]="exceptionsTotalEntries" [pageSize]="exceptions.length" aria-label="Select page">
             </mat-paginator>
         </div>
     </div>

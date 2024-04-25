@@ -3,3 +3,8 @@ export interface MethodException {
   occuredAt: Date;
   exception: any;
 }
+
+export interface MethodExceptionsResponse {
+  totalEntries: number;
+  exceptions: MethodException[];
+}
