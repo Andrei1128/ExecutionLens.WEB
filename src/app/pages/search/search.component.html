@@ -8,44 +8,50 @@
                             <div class="search-header">
                                 <mat-form-field class="search-bar">
                                     <mat-label>Filter</mat-label>
-                                    <input [formControl]="searchBar" [disabled]="searchByIdActive" matInput>
+                                    <input [formControl]="searchBar" matInput>
                                 </mat-form-field>
-                                <button (click)="addAdvancedFilter()" [disabled]="emptySearch || searchByIdActive"
+                                <button (click)="addAdvancedFilter()" type="button"
                                     *ngIf="(!emptySearch) && !searchByIdActive" class="add-btn" mat-stroked-button>Add
                                     Filter</button>
                             </div>
-                            <mat-radio-group [formControl]="radioButtonGroup"
-                                [disabled]="emptySearch || searchByIdActive" class="search-body"
+                            <mat-radio-group [formControl]="radioButtonGroup" class="search-body"
                                 *ngIf="(!emptySearch) && !searchByIdActive">
                                 <div class="options-col">
                                     <label>Input</label>
                                     <mat-radio-button value="Input is">is</mat-radio-button>
-                                    <mat-radio-button value="Input isNot">is not</mat-radio-button>
+                                    <mat-radio-button value="Input not">is not</mat-radio-button>
                                     <mat-radio-button value="Input contains">contains</mat-radio-button>
-                                    <mat-radio-button value="Input notContains">not contains</mat-radio-button>
+                                    <mat-radio-button value="Input not_contains">not contains</mat-radio-button>
+                                    <mat-radio-button value="Input like">like</mat-radio-button>
+                                    <mat-radio-button value="Input not_like">not like</mat-radio-button>
                                 </div>
                                 <div class="options-col">
                                     <label>Output</label>
                                     <mat-radio-button value="Output is">is</mat-radio-button>
-                                    <mat-radio-button value="Output isNot">is not</mat-radio-button>
+                                    <mat-radio-button value="Output not">is not</mat-radio-button>
                                     <mat-radio-button value="Output contains">contains</mat-radio-button>
-                                    <mat-radio-button value="Output notContains">not contains</mat-radio-button>
+                                    <mat-radio-button value="Output not_contains">not contains</mat-radio-button>
+                                    <mat-radio-button value="Output like">like</mat-radio-button>
+                                    <mat-radio-button value="Output not_like">not like</mat-radio-button>
                                 </div>
                                 <div class="options-col second-col">
                                     <label>Information</label>
                                     <mat-radio-button value="Information is">is</mat-radio-button>
-                                    <mat-radio-button value="Information isNot">is not</mat-radio-button>
+                                    <mat-radio-button value="Information not">is not</mat-radio-button>
                                     <mat-radio-button value="Information contains">contains</mat-radio-button>
-                                    <mat-radio-button value="Information notContains">not contains</mat-radio-button>
+                                    <mat-radio-button value="Information not_contains">not contains</mat-radio-button>
+                                    <mat-radio-button value="Information like">like</mat-radio-button>
+                                    <mat-radio-button value="Information not_like">not like</mat-radio-button>
                                 </div>
                             </mat-radio-group>
 
                         </div>
                         <mat-chip-set>
-                            <mat-chip-option *ngFor="let filter of advancedFilters"
+                            <mat-chip-option [ngClass]="{'disabled-chip': searchByIdActive}"
+                                [disabled]="searchByIdActive" *ngFor="let filter of advancedFilters"
                                 (click)="removeAdvancedFilter(filter)">
                                 <div class="search-filter-chip">
-                                    {{filter.Target}} {{filter.Operation}} '{{filter.Value}}' <mat-icon>close</mat-icon>
+                                    {{filter.target}} {{filter.operation}} '{{filter.value}}' <mat-icon>close</mat-icon>
                                 </div>
                             </mat-chip-option>
                         </mat-chip-set>
@@ -53,7 +59,7 @@
                     <div class="form-item">
                         <mat-form-field>
                             <mat-label>Enter a date range</mat-label>
-                            <mat-date-range-input [disabled]="searchByIdActive" [rangePicker]="picker">
+                            <mat-date-range-input [rangePicker]="picker">
                                 <input matStartDate formControlName="dateStart" placeholder="Start date">
                                 <input matEndDate formControlName="dateEnd" placeholder="End date">
                             </mat-date-range-input>
@@ -62,45 +68,54 @@
                             <mat-date-range-picker #picker></mat-date-range-picker>
                         </mat-form-field>
 
-                        <mat-form-field>
-                            <mat-label>Select controllers</mat-label>
-                            <mat-select [disabled]="searchByIdActive" multiple>
-                                @for (controller of controllerList; track controller) {
-                                <mat-option [value]="controller">{{controller}}</mat-option> }
+                        <mat-form-field (click)="getClassNames()">
+                            <mat-label *ngIf="isClassNamesLoading; else classElseBlock">Loading classes..</mat-label>
+                            <ng-template #classElseBlock> <mat-label>Select classes</mat-label></ng-template>
+                            <mat-select #classSelect multiple formControlName="controllers">
+                                <ng-container *ngFor="let controller of controllerList; ">
+                                    <mat-option *ngIf="!isClassNamesLoading" [value]="controller">
+                                        {{ controller.split(",")[0].split(".")[2] }}
+                                    </mat-option>
+                                </ng-container>
                             </mat-select>
                         </mat-form-field>
 
-                        <mat-form-field>
-                            <mat-label>Select methods</mat-label>
-                            <mat-select [disabled]="searchByIdActive" multiple>
-                                @for (endpoint of endpointList; track endpoint) {
-                                <mat-option [value]="endpoint">{{endpoint}}</mat-option> }
+                        <mat-form-field (click)="getMethodNames()">
+                            <mat-label *ngIf="isMethodNamesLoading; else methodElseBlock">Loading methods..</mat-label>
+                            <ng-template #methodElseBlock> <mat-label>Select methods</mat-label></ng-template>
+                            <mat-select multiple formControlName="endpoints">
+                                <ng-container *ngFor="let endpoint of endpointList; ">
+                                    <mat-option *ngIf="!isMethodNamesLoading" [value]="endpoint">{{ endpoint
+                                        }}</mat-option>
+                                </ng-container>
                             </mat-select>
                         </mat-form-field>
 
                         <mat-form-field>
                             <mat-label>Has exception</mat-label>
-                            <mat-select [disabled]="searchByIdActive">
-                                @for (endpoint of ["Any","Yes","No"]; track endpoint) {
-                                <mat-option [value]="endpoint">{{endpoint}}</mat-option> }
+                            <mat-select formControlName="hasException">
+                                <ng-container *ngFor="let exception of ['Any', 'Yes', 'No']; ">
+                                    <mat-option [value]="exception">{{exception}}</mat-option>
+                                </ng-container>
                             </mat-select>
                         </mat-form-field>
                     </div>
                     <div class="form-item">
                         <mat-form-field>
                             <mat-label>Order by</mat-label>
-                            <mat-select [disabled]="searchByIdActive">
-                                @for (property of orderOptions; track property) {
-                                <mat-option [value]="property.value">{{property.viewValue}}</mat-option>
-                                }
+                            <mat-select formControlName="orderBy">
+                                <ng-container *ngFor="let option of orderOptions; ">
+                                    <mat-option [value]="option">{{option}}</mat-option>
+                                </ng-container>
                             </mat-select>
                         </mat-form-field>
 
                         <mat-form-field>
                             <mat-label>Page size</mat-label>
-                            <input (keypress)="numberOnly($event)" [disabled]="searchByIdActive" matInput>
+                            <input formControlName="pageSize" (keypress)="numberOnly($event)" matInput>
                         </mat-form-field>
                     </div>
+
 
                     <mat-form-field class="search-id">
                         <mat-label>Search by Id</mat-label>
@@ -111,39 +126,39 @@
             </form>
         </div>
     </div>
-    <div class="cards-wrapper">
+    <div *ngIf="logs.length > 0" class="cards-wrapper">
         <div class="card">
             <div class="buttons-wrapper">
                 <button mat-stroked-button (click)="openDialog()">Save Search</button>
-                <button mat-stroked-button>Export Data</button>
+                <button mat-stroked-button (click)="exportData()">Export Data</button>
             </div>
 
-            <div routerLink="/log-details" class="logs-wrapper" *ngFor="let log of logs">
+            <div [routerLink]="['/log', log.id]" class="logs-wrapper" *ngFor="let log of logs">
                 <div class="log">
                     <div class="log-metadata">
-                        <p>{{log.Controller}}</p>
-                        <p>{{log.Endpoint}}</p>
-                        <p class="logId">{{log.Id}}</p>
+                        <p>{{log.class}}</p>
+                        <p>{{log.method}}</p>
+                        <p class="logId">{{log.id}}</p>
                     </div>
                     <mat-chip-set>
                         <mat-chip-option disabled>
-                            Called at: {{(log.EntryTime | dateFormat)}}
+                            Called at: {{(log.entryTime | dateFormat)}}
                         </mat-chip-option>
                         <mat-chip-option disabled>
-                            Ended at: {{(log.ExitTime | dateFormat)}}
+                            Ended at: {{(log.exitTime | dateFormat)}}
                         </mat-chip-option>
                         <mat-chip-option disabled>
-                            Duration: {{(log.Duration)}}
+                            Duration: {{(log.duration)}}
                         </mat-chip-option>
                         <mat-chip-option disabled>
-                            Has exception: {{log.HasException}}
+                            Has exception: {{log.hasException}}
                         </mat-chip-option>
                     </mat-chip-set>
                 </div>
             </div>
 
-            <mat-paginator [showFirstLastButtons]="true" [hidePageSize]="true" [length]="100" [pageSize]="10"
-                aria-label="Select page">
+            <mat-paginator [showFirstLastButtons]="true" (page)="handlePageEvent($event)" [hidePageSize]="true"
+                [length]="logsTotalEntries" [pageIndex]="pageIndex" [pageSize]="pageSize" aria-label="Select page">
             </mat-paginator>
         </div>
     </div>

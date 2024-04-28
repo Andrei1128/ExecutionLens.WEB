@@ -20,6 +20,7 @@ import { NgIf } from '@angular/common';
 import { LogService } from '../../_core/services/log.service';
 import { ExecutionTime } from '../../_core/models/ExecutionTime';
 import { SequenceDiagramInteraction } from '../../_core/models/SequenceDiagramInteraction';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-log-details',
@@ -43,7 +44,7 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   methodsExecutionTimeChart: any | null = null;
 
-  logId: string = 'DgsxEY8ByXlb8mAom03u';
+  logId: string | null = null;
   log: Log | null = null;
 
   @ViewChild('panzoomElement') panzoomElement: ElementRef | undefined;
@@ -82,12 +83,16 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   popoverY: number = 0;
   popoverContent: string = '';
 
-  constructor(private logService: LogService) {}
+  constructor(private logService: LogService, private route: ActivatedRoute) {}
 
   ngOnInit() {
+    this.route.paramMap.subscribe((params) => {
+      this.logId = params.get('id');
+    });
+
     this.createMethodsExecutionTimeChart();
 
-    this.logService.getLog(this.logId).subscribe({
+    this.logService.getLog(this.logId!).subscribe({
       next: (res) => {
         console.log(res);
         this.log = res;
@@ -133,6 +138,10 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.handleOutsideClick.bind(this)
     );
     document.body.removeEventListener('wheel', this.hidePopover.bind(this));
+  }
+
+  replay() {
+    this.logService.replay(this.logId!).subscribe(() => {});
   }
 
   getControllerName(fullName: string | undefined) {

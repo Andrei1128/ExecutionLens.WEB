@@ -1,9 +1,9 @@
 export interface LogOverview {
-  Id: string;
-  Controller: string;
-  Endpoint: string;
-  HasException: boolean;
-  EntryTime: Date;
-  ExitTime: Date;
-  Duration: string;
+  id: string;
+  class: string;
+  method: string;
+  hasException: boolean;
+  entryTime: Date;
+  exitTime: Date;
+  duration: string;
 }

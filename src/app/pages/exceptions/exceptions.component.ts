@@ -42,6 +42,7 @@ export class ExceptionsComponent implements OnInit {
   exceptionsCountChart: any | null = null;
   exceptions: MethodException[] = [];
   exceptionsTotalEntries: number = 0;
+  pageIndex: number = 0;
   exceptionsDetailsMethod: string = 'Latest';
   exceptionsCount: ExceptionsCount[] = [];
 
@@ -72,6 +73,8 @@ export class ExceptionsComponent implements OnInit {
   }
 
   handlePageEvent(e: PageEvent) {
+    this.pageIndex = e.pageIndex;
+
     let methodName: string =
       this.exceptionsDetailsMethod == 'Latest'
         ? ''
@@ -116,6 +119,7 @@ export class ExceptionsComponent implements OnInit {
         },
         onClick: (e, item) => {
           if (item.length > 0) {
+            this.pageIndex = 0;
             this.exceptionsDetailsMethod =
               this.exceptionsCountChart.data.labels[item[0].index];
             this.logService

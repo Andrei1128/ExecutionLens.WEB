@@ -40,7 +40,7 @@ export const routes: Routes = [
       import('./pages/time/time.component').then((m) => m.TimeComponent),
   },
   {
-    path: 'log-details',
+    path: 'log/:id',
     loadComponent: () =>
       import('./pages/log-details/log-details.component').then(
         (m) => m.LogDetailsComponent

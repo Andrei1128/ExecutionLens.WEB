@@ -75,7 +75,7 @@ export class TimeComponent implements OnInit {
   }
 
   createMethodsExecutionTimeChart() {
-    this.methodsExecutionTimeChart = new Chart('methodsExecutionTimeChart', {
+    this.methodsExecutionTimeChart = new Chart('methodsExecutionsTimeChart', {
       type: 'bar',
       data: {
         labels: [],

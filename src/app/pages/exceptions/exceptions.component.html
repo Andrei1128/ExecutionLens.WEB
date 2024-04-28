@@ -58,7 +58,8 @@
         <div class="card">
             <h2 class="method-title">{{exceptionsDetailsMethod}} exceptions</h2>
 
-            <div routerLink="/log-details" class="exceptions-wrapper" *ngFor="let exception of exceptions">
+            <div [routerLink]="['/log', exception.nodeId]" class="exceptions-wrapper"
+                *ngFor="let exception of exceptions">
                 <div class="exception">
                     <div class="exception-metadata">
                         <p>{{exception.exception.type}}</p>
@@ -72,7 +73,8 @@
             </div>
 
             <mat-paginator [showFirstLastButtons]="true" (page)="handlePageEvent($event)" [hidePageSize]="true"
-                [length]="exceptionsTotalEntries" [pageSize]="exceptions.length" aria-label="Select page">
+                [length]="exceptionsTotalEntries" [pageIndex]="pageIndex" [pageSize]="exceptions.length"
+                aria-label="Select page">
             </mat-paginator>
         </div>
     </div>
