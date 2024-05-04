@@ -1,14 +1,21 @@
 <div class="component-container">
     <div class="cards-wrapper">
-        <div class="card log-overview-card">
+        <div *ngIf="!overviewLoading" class="card log-overview-card">
             <div class="buttons-wrapper">
-                <button mat-stroked-button (click)="replay()">Replay</button>
+                <button mat-stroked-button [disabled]="isReplaying" (click)="replay()">
+                    <span class="btn-content">
+                        Replay
+                        <mat-spinner diameter="19" *ngIf="isReplaying">
+                        </mat-spinner>
+                    </span>
+                </button>
             </div>
             <mat-card>
                 <div class="log-overview">
                     <p><span class="row-header">Id:</span> <span>{{logId}}</span></p>
                     <mat-divider></mat-divider>
-                    <p><span class="row-header">Controller:</span> <span>{{getControllerName(log?.class)}}</span></p>
+                    <p><span class="row-header">Controller:</span> <span>{{getControllerName(log?.class)}}</span>
+                    </p>
                     <mat-divider></mat-divider>
                     <p><span class="row-header">Method:</span> <span>{{log?.method}}</span></p>
                     <mat-divider></mat-divider>

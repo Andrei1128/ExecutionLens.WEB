@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   OnDestroy,
@@ -16,11 +15,13 @@ import { MatDividerModule } from '@angular/material/divider';
 import { PanZoomConfig, PanZoomAPI, PanZoomComponent } from 'ngx-panzoom';
 import { Point } from 'ngx-panzoom/lib/types/point';
 import { PopoverComponent } from '../../shared/popover/popover.component';
-import { NgIf } from '@angular/common';
+import { NgIf, NgClass } from '@angular/common';
 import { LogService } from '../../_core/services/log.service';
 import { ExecutionTime } from '../../_core/models/ExecutionTime';
 import { SequenceDiagramInteraction } from '../../_core/models/SequenceDiagramInteraction';
 import { ActivatedRoute } from '@angular/router';
+import { LogOverview } from '../../_core/models/LogOverview';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-log-details',
@@ -33,11 +34,13 @@ import { ActivatedRoute } from '@angular/router';
     MatCardModule,
     MatDividerModule,
     PanZoomComponent,
+    MatProgressSpinnerModule,
     PopoverComponent,
     NgIf,
+    NgClass,
   ],
 })
-export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class LogDetailsComponent implements OnInit, OnDestroy {
   @ViewChild('sequenceDiagramDiv') sequenceDiagramElement:
     | ElementRef
     | undefined;
@@ -45,7 +48,7 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   methodsExecutionTimeChart: any | null = null;
 
   logId: string | null = null;
-  log: Log | null = null;
+  log: LogOverview | null = null;
 
   @ViewChild('panzoomElement') panzoomElement: ElementRef | undefined;
   private panZoomAPI: PanZoomAPI | undefined;
@@ -83,6 +86,11 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   popoverY: number = 0;
   popoverContent: string = '';
 
+  overviewLoading: boolean = false;
+  sequenceDiagramLoading: boolean = false;
+  methodsExecutionTimeLoading: boolean = false;
+  isReplaying: boolean = false;
+
   constructor(private logService: LogService, private route: ActivatedRoute) {}
 
   ngOnInit() {
@@ -90,20 +98,24 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.logId = params.get('id');
     });
 
-    this.createMethodsExecutionTimeChart();
+    this.overviewLoading = true;
+    this.logService.getNodeOverview(this.logId!, true).subscribe((res) => {
+      this.log = res;
+      this.overviewLoading = false;
+    });
 
+    this.methodsExecutionTimeLoading = true;
+    this.logService.getLogExecutionsTime(this.logId!).subscribe((res) => {
+      this.createMethodsExecutionTimeChart();
+      this.initializeMethodsExecutionTimeChart(res);
+      this.methodsExecutionTimeLoading = false;
+    });
+
+    // this.sequenceDiagramLoading = true;
     this.logService.getLog(this.logId!).subscribe({
       next: (res) => {
-        console.log(res);
-        this.log = res;
-        this.initializeMethodsExecutionTimeChart().then(
-          () => {},
-          (error) => console.log(error)
-        );
-        this.initializeSequenceDiagram().then(
-          () => {},
-          (error) => console.log(error)
-        );
+        this.sequenceDiagramLoading = false;
+        this.initializeSequenceDiagram(res);
       },
       error: (error) => {
         console.log(error);
@@ -118,13 +130,13 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  ngAfterViewInit(): void {
+  addPanZoom(): void {
     const width = this.panzoomElement?.nativeElement.offsetWidth;
     const height = this.panzoomElement?.nativeElement.offsetHeight;
 
     const point: Point = { x: width / 9.5, y: height / 12 };
 
-    this.panZoomAPI?.panToPoint(point);
+    this.panZoomAPI?.panToPoint(point, 0);
     this.panzoomElement?.nativeElement.addEventListener(
       'wheel',
       this.zoomHandler.bind(this),
@@ -141,7 +153,15 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   replay() {
-    this.logService.replay(this.logId!).subscribe(() => {});
+    this.isReplaying = true;
+    this.logService.replay(this.logId!).subscribe({
+      next: (res) => {
+        this.isReplaying = false;
+      },
+      error: (error) => {
+        this.isReplaying = false;
+      },
+    });
   }
 
   getControllerName(fullName: string | undefined) {
@@ -184,15 +204,6 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   addDiagramPopover(interactions: any[], notes: string[]) {
     var messageTextElements = document.getElementsByClassName('messageText');
     var messageNoteElements = document.getElementsByClassName('noteText');
-
-    // var actorManLine = document.getElementById('actor0');
-    // if (actorManLine) actorManLine.style.display = 'none';
-
-    // var actorMans = document.getElementsByClassName('actor-man');
-    // for (var i = 0; i < actorMans.length; i++) {
-    //   var element = actorMans[i] as HTMLElement;
-    //   element.style.display = 'none';
-    // }
 
     for (var i = 0; i < messageTextElements.length; i++) {
       var element = messageTextElements[i] as HTMLElement;
@@ -336,13 +347,13 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  async initializeSequenceDiagram(): Promise<void> {
+  async initializeSequenceDiagram(log: Log): Promise<void> {
     if (!this.log) return;
 
     const interactions: SequenceDiagramInteraction[] = [];
 
-    this.createSequenceDiagramDefinition(null, this.log, interactions);
-    this.createSequenceDiagramDefinition(null, this.log, interactions, true);
+    this.createSequenceDiagramDefinition(null, log, interactions);
+    this.createSequenceDiagramDefinition(null, log, interactions, true);
 
     let graphDefinition = 'sequenceDiagram\nactor Initiator\n';
 
@@ -365,7 +376,7 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.sequenceDiagramTheme + graphDefinition
     );
 
-    const element: Element = this.sequenceDiagramElement?.nativeElement;
+    var element: Element = this.sequenceDiagramElement?.nativeElement;
 
     element.innerHTML = svg;
     bindFunctions?.(element);
@@ -385,6 +396,8 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       sequenceDiagramInteractionsContent,
       sequenceDiagramNotesContent
     );
+
+    this.addPanZoom();
   }
 
   createMethodsExecutionTimeChart() {
@@ -410,13 +423,9 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  async initializeMethodsExecutionTimeChart(): Promise<void> {
-    if (!this.log) return;
-
-    const executionTimes: ExecutionTime[] = [];
-
-    this.calculateExecutionTimesForLog(this.log, executionTimes);
-
+  async initializeMethodsExecutionTimeChart(
+    executionTimes: ExecutionTime[]
+  ): Promise<void> {
     this.methodsExecutionTimeChart?.data.datasets.splice(
       0,
       this.methodsExecutionTimeChart?.data.datasets.length
@@ -432,25 +441,9 @@ export class LogDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.methodsExecutionTimeChart?.data.datasets.push({
       label: 'ms',
-      data: executionTimes.map((x) => x.value),
+      data: executionTimes.map((x) => x.time),
     });
 
     this.methodsExecutionTimeChart?.update();
-  }
-
-  calculateExecutionTimesForLog(
-    log: Log,
-    executionTimes: ExecutionTime[]
-  ): void {
-    executionTimes.push({
-      method: log.method,
-      value: this.getTimeDifference(log?.entryTime, log?.exitTime),
-    });
-
-    if (log.interactions && log.interactions.length > 0) {
-      log.interactions.forEach((interaction) => {
-        this.calculateExecutionTimesForLog(interaction, executionTimes);
-      });
-    }
   }
 }

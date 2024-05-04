@@ -18,6 +18,8 @@ import { LogService } from '../../_core/services/log.service';
 import { ExceptionsCount } from '../../_core/models/ExceptionsCount';
 import { MethodException } from '../../_core/models/MethodException';
 import { GraphFilters } from '../../_core/models/GraphFilters';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BinaryChoice } from '../../_core/consts/BinaryChoice';
 
 @Component({
   selector: 'app-exceptions',
@@ -34,6 +36,7 @@ import { GraphFilters } from '../../_core/models/GraphFilters';
     MatSelectModule,
     MatButtonModule,
     MatNativeDateModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './exceptions.component.html',
   styleUrl: './exceptions.component.scss',
@@ -48,13 +51,16 @@ export class ExceptionsComponent implements OnInit {
 
   controllerList: string[] = ['none'];
   endpointList: string[] = ['none'];
+  isFetching: boolean = false;
+
+  isRootChoices = BinaryChoice;
 
   filters = new FormGroup({
     dateStart: new FormControl<Date | null>(null),
     dateEnd: new FormControl<Date | null>(null),
     controllers: new FormControl(),
     endpoints: new FormControl(),
-    isEntryPoint: new FormControl('Any'),
+    isEntryPoint: new FormControl<number>(0),
   });
 
   isClassNamesLoading: boolean = false;
@@ -141,40 +147,58 @@ export class ExceptionsComponent implements OnInit {
             align: 'start',
           },
         },
+        scales: {
+          y: {
+            ticks: {
+              display: false,
+            },
+          },
+        },
       },
     });
   }
 
   fetchExceptionsCount() {
+    this.isFetching = true;
     const filters: GraphFilters = {
       dateStart: this.filters.controls.dateStart.value,
       dateEnd: this.filters.controls.dateEnd.value,
-      controllers: this.filters.controls.controllers.value,
-      endpoints: this.filters.controls.endpoints.value,
-      isEntryPoint: this.filters.controls.isEntryPoint.value,
+      classes: this.filters.controls.controllers.value,
+      methods: this.filters.controls.endpoints.value,
+      isEntryPoint: this.filters.controls.isEntryPoint.value!,
     };
 
-    this.logService.getExceptionsCount(filters).subscribe((data) => {
-      this.exceptionsCount = data;
+    console.log(filters);
 
-      this.exceptionsCountChart?.data.datasets.splice(
-        0,
-        this.exceptionsCountChart?.data.datasets.length
-      );
-      this.exceptionsCountChart?.data.labels?.splice(
-        0,
-        this.exceptionsCountChart?.data.labels?.length
-      );
+    this.logService.getExceptionsCount(filters).subscribe({
+      next: (data) => {
+        this.exceptionsCount = data;
 
-      this.exceptionsCountChart?.data.labels?.push(
-        ...this.exceptionsCount.map((x) => x.method)
-      );
+        this.exceptionsCountChart?.data.datasets.splice(
+          0,
+          this.exceptionsCountChart?.data.datasets.length
+        );
+        this.exceptionsCountChart?.data.labels?.splice(
+          0,
+          this.exceptionsCountChart?.data.labels?.length
+        );
 
-      this.exceptionsCountChart?.data.datasets.push({
-        data: this.exceptionsCount.map((x) => x.count),
-      });
+        this.exceptionsCountChart?.data.labels?.push(
+          ...this.exceptionsCount.map((x) => x.method)
+        );
 
-      this.exceptionsCountChart?.update();
+        this.exceptionsCountChart?.data.datasets.push({
+          data: this.exceptionsCount.map((x) => x.count),
+        });
+
+        this.exceptionsCountChart?.update();
+        setTimeout(() => {
+          this.isFetching = false;
+        }, 100);
+      },
+      error: (err) => {
+        this.isFetching = false;
+      },
     });
   }
 }

@@ -1,4 +1,5 @@
 export interface ExecutionTime {
+  class: string;
   method: string;
-  value: number;
+  time: number;
 }

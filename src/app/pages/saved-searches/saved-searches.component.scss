@@ -22,6 +22,12 @@
     gap: 1rem;
 }
 
+.noContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .search-metadata {
     font-weight: 600;
     display: flex;
