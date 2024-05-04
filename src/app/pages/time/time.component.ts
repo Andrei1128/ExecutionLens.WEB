@@ -14,6 +14,8 @@ import {
 import { LogService } from '../../_core/services/log.service';
 import { ExecutionsTime } from '../../_core/models/ExecutionsTime';
 import { GraphFilters } from '../../_core/models/GraphFilters';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BinaryChoice } from '../../_core/consts/BinaryChoice';
 
 @Component({
   selector: 'app-time',
@@ -27,6 +29,7 @@ import { GraphFilters } from '../../_core/models/GraphFilters';
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './time.component.html',
   styleUrl: './time.component.scss',
@@ -43,11 +46,15 @@ export class TimeComponent implements OnInit {
     dateEnd: new FormControl<Date | null>(null),
     controllers: new FormControl(),
     endpoints: new FormControl(),
-    isEntryPoint: new FormControl('Any'),
+    isEntryPoint: new FormControl<number>(0),
   });
+
+  isRootChoices = BinaryChoice;
 
   isClassNamesLoading: boolean = false;
   isMethodNamesLoading: boolean = false;
+
+  isFetching: boolean = false;
 
   constructor(private logService: LogService) {}
 
@@ -106,46 +113,59 @@ export class TimeComponent implements OnInit {
   }
 
   fetchMethodsExecutionTime() {
+    this.isFetching = true;
+
     const filters: GraphFilters = {
       dateStart: this.filters.controls.dateStart.value,
       dateEnd: this.filters.controls.dateEnd.value,
-      controllers: this.filters.controls.controllers.value,
-      endpoints: this.filters.controls.endpoints.value,
-      isEntryPoint: this.filters.controls.isEntryPoint.value,
+      classes: this.filters.controls.controllers.value,
+      methods: this.filters.controls.endpoints.value,
+      isEntryPoint: this.filters.controls.isEntryPoint.value!,
     };
 
-    this.logService.getExecutionsTime(filters).subscribe((data) => {
-      this.methodsExecutionTimes = data;
+    console.log(filters);
 
-      this.methodsExecutionTimeChart?.data.datasets.splice(
-        0,
-        this.methodsExecutionTimeChart?.data.datasets.length
-      );
-      this.methodsExecutionTimeChart?.data.labels?.splice(
-        0,
-        this.methodsExecutionTimeChart?.data.labels?.length
-      );
+    this.logService.getExecutionsTime(filters).subscribe({
+      next: (data) => {
+        this.methodsExecutionTimes = data;
 
-      this.methodsExecutionTimeChart?.data.labels?.push(
-        ...this.methodsExecutionTimes.map((x) => x.method)
-      );
+        this.methodsExecutionTimeChart?.data.datasets.splice(
+          0,
+          this.methodsExecutionTimeChart?.data.datasets.length
+        );
+        this.methodsExecutionTimeChart?.data.labels?.splice(
+          0,
+          this.methodsExecutionTimeChart?.data.labels?.length
+        );
 
-      this.methodsExecutionTimeChart?.data.datasets.push({
-        label: 'min',
-        data: this.methodsExecutionTimes.map((x) => x.min),
-      });
+        this.methodsExecutionTimeChart?.data.labels?.push(
+          ...this.methodsExecutionTimes.map((x) => x.method)
+        );
 
-      this.methodsExecutionTimeChart?.data.datasets.push({
-        label: 'avg',
-        data: this.methodsExecutionTimes.map((x) => x.avg),
-      });
+        this.methodsExecutionTimeChart?.data.datasets.push({
+          label: 'min',
+          data: this.methodsExecutionTimes.map((x) => x.min),
+        });
 
-      this.methodsExecutionTimeChart?.data.datasets.push({
-        label: 'max',
-        data: this.methodsExecutionTimes.map((x) => x.max),
-      });
+        this.methodsExecutionTimeChart?.data.datasets.push({
+          label: 'avg',
+          data: this.methodsExecutionTimes.map((x) => x.avg),
+        });
 
-      this.methodsExecutionTimeChart?.update();
+        this.methodsExecutionTimeChart?.data.datasets.push({
+          label: 'max',
+          data: this.methodsExecutionTimes.map((x) => x.max),
+        });
+
+        this.methodsExecutionTimeChart?.update();
+
+        setTimeout(() => {
+          this.isFetching = false;
+        }, 100);
+      },
+      error: (error) => {
+        this.isFetching = false;
+      },
     });
   }
 }

@@ -2,10 +2,10 @@ export interface SearchFilter {
   filters: Filter[] | null;
   dateStart: Date | null;
   dateEnd: Date | null;
-  controllers: string[] | null;
-  endpoints: string[] | null;
-  hasException: string | null;
-  orderBy: string | null;
+  classes: string[] | null;
+  methods: string[] | null;
+  hasException: number;
+  orderBy: number;
   pageSize: number | null;
   pageNo: number | null;
 
@@ -13,7 +13,7 @@ export interface SearchFilter {
 }
 
 export interface Filter {
-  target: string;
-  operation: string;
+  target: number;
+  operation: number;
   value: string;
 }

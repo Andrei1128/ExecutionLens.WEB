@@ -150,10 +150,18 @@ div.mat-mdc-select-panel {
 
     * {
         font-weight: 600;
-        // font-size: 0.97rem;
     }
 
     background-color: var(--btn-primary) !important;
+}
+
+.btn-content {
+    display: flex;
+    gap: 0.6rem;
+
+    * {
+        margin: 0;
+    }
 }
 
 * {
@@ -190,6 +198,32 @@ body {
     border: 1px solid var(--second-border);
     padding: 3rem 3rem 3.4rem 3rem;
     border-radius: 1rem;
+}
+
+.spinner-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .mat-mdc-progress-spinner .mdc-circular-progress__determinate-circle,
+    .mat-mdc-progress-spinner .mdc-circular-progress__indeterminate-circle-graphic {
+        stroke: white !important;
+    }
+}
+
+.card-spinner {
+    .mat-mdc-progress-spinner circle {
+        stroke-width: 2% !important;
+    }
+
+    .mat-mdc-progress-spinner .mdc-circular-progress__determinate-circle,
+    .mat-mdc-progress-spinner .mdc-circular-progress__indeterminate-circle-graphic {
+        stroke: var(--btn-secondary) !important;
+    }
+
+    min-height: 50vh;
 }
 
 ::-webkit-scrollbar {
@@ -328,7 +362,8 @@ body {
         transition: all 0.2s ease-in-out;
 
         * {
-            color: white;
+            stroke: white !important;
+            color: white !important;
         }
     }
 }

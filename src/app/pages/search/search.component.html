@@ -18,30 +18,30 @@
                                 *ngIf="(!emptySearch) && !searchByIdActive">
                                 <div class="options-col">
                                     <label>Input</label>
-                                    <mat-radio-button value="Input is">is</mat-radio-button>
-                                    <mat-radio-button value="Input not">is not</mat-radio-button>
-                                    <mat-radio-button value="Input contains">contains</mat-radio-button>
-                                    <mat-radio-button value="Input not_contains">not contains</mat-radio-button>
-                                    <mat-radio-button value="Input like">like</mat-radio-button>
-                                    <mat-radio-button value="Input not_like">not like</mat-radio-button>
+                                    <mat-radio-button value="00">is</mat-radio-button>
+                                    <mat-radio-button value="01">is not</mat-radio-button>
+                                    <mat-radio-button value="02">contains</mat-radio-button>
+                                    <mat-radio-button value="03">not contains</mat-radio-button>
+                                    <mat-radio-button value="04">like</mat-radio-button>
+                                    <mat-radio-button value="05">not like</mat-radio-button>
                                 </div>
                                 <div class="options-col">
                                     <label>Output</label>
-                                    <mat-radio-button value="Output is">is</mat-radio-button>
-                                    <mat-radio-button value="Output not">is not</mat-radio-button>
-                                    <mat-radio-button value="Output contains">contains</mat-radio-button>
-                                    <mat-radio-button value="Output not_contains">not contains</mat-radio-button>
-                                    <mat-radio-button value="Output like">like</mat-radio-button>
-                                    <mat-radio-button value="Output not_like">not like</mat-radio-button>
+                                    <mat-radio-button value="10">is</mat-radio-button>
+                                    <mat-radio-button value="11">is not</mat-radio-button>
+                                    <mat-radio-button value="12">contains</mat-radio-button>
+                                    <mat-radio-button value="13">not contains</mat-radio-button>
+                                    <mat-radio-button value="14">like</mat-radio-button>
+                                    <mat-radio-button value="15">not like</mat-radio-button>
                                 </div>
                                 <div class="options-col second-col">
                                     <label>Information</label>
-                                    <mat-radio-button value="Information is">is</mat-radio-button>
-                                    <mat-radio-button value="Information not">is not</mat-radio-button>
-                                    <mat-radio-button value="Information contains">contains</mat-radio-button>
-                                    <mat-radio-button value="Information not_contains">not contains</mat-radio-button>
-                                    <mat-radio-button value="Information like">like</mat-radio-button>
-                                    <mat-radio-button value="Information not_like">not like</mat-radio-button>
+                                    <mat-radio-button value="20">is</mat-radio-button>
+                                    <mat-radio-button value="21">is not</mat-radio-button>
+                                    <mat-radio-button value="22">contains</mat-radio-button>
+                                    <mat-radio-button value="23">not contains</mat-radio-button>
+                                    <mat-radio-button value="24">like</mat-radio-button>
+                                    <mat-radio-button value="25">not like</mat-radio-button>
                                 </div>
                             </mat-radio-group>
 
@@ -51,7 +51,9 @@
                                 [disabled]="searchByIdActive" *ngFor="let filter of advancedFilters"
                                 (click)="removeAdvancedFilter(filter)">
                                 <div class="search-filter-chip">
-                                    {{filter.target}} {{filter.operation}} '{{filter.value}}' <mat-icon>close</mat-icon>
+                                    {{getTarget(filter.target)}} {{getOperation(filter.operation)}}
+                                    '{{getFilterValue(filter.value,filter.operation)}}'
+                                    <mat-icon>close</mat-icon>
                                 </div>
                             </mat-chip-option>
                         </mat-chip-set>
@@ -74,7 +76,7 @@
                             <mat-select #classSelect multiple formControlName="controllers">
                                 <ng-container *ngFor="let controller of controllerList; ">
                                     <mat-option *ngIf="!isClassNamesLoading" [value]="controller">
-                                        {{ controller.split(",")[0].split(".")[2] }}
+                                        {{ controller.split(",")[0].split(".").reverse()[0] }}
                                     </mat-option>
                                 </ng-container>
                             </mat-select>
@@ -94,8 +96,8 @@
                         <mat-form-field>
                             <mat-label>Has exception</mat-label>
                             <mat-select formControlName="hasException">
-                                <ng-container *ngFor="let exception of ['Any', 'Yes', 'No']; ">
-                                    <mat-option [value]="exception">{{exception}}</mat-option>
+                                <ng-container *ngFor="let exception of hasExceptionChoices;">
+                                    <mat-option [value]="exception.value">{{exception.label}}</mat-option>
                                 </ng-container>
                             </mat-select>
                         </mat-form-field>
@@ -104,8 +106,8 @@
                         <mat-form-field>
                             <mat-label>Order by</mat-label>
                             <mat-select formControlName="orderBy">
-                                <ng-container *ngFor="let option of orderOptions; ">
-                                    <mat-option [value]="option">{{option}}</mat-option>
+                                <ng-container *ngFor="let option of orderByChoices; ">
+                                    <mat-option [value]="option.value">{{option.label}}</mat-option>
                                 </ng-container>
                             </mat-select>
                         </mat-form-field>
@@ -122,7 +124,13 @@
                         <input formControlName="searchId" matInput>
                     </mat-form-field>
                 </div>
-                <button mat-stroked-button>Fetch</button>
+                <button [disabled]="isFetching" mat-stroked-button>
+                    <span class="btn-content">
+                        Fetch
+                        <mat-spinner diameter="19" *ngIf="isFetching">
+                        </mat-spinner>
+                    </span>
+                </button>
             </form>
         </div>
     </div>
@@ -130,7 +138,13 @@
         <div class="card">
             <div class="buttons-wrapper">
                 <button mat-stroked-button (click)="openDialog()">Save Search</button>
-                <button mat-stroked-button (click)="exportData()">Export Data</button>
+                <button (click)="exportData()" [disabled]="isExporting" mat-stroked-button>
+                    <span class="btn-content">
+                        Export Data
+                        <mat-spinner diameter="19" *ngIf="isExporting">
+                        </mat-spinner>
+                    </span>
+                </button>
             </div>
 
             <div [routerLink]="['/log', log.id]" class="logs-wrapper" *ngFor="let log of logs">

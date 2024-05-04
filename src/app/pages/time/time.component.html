@@ -20,7 +20,7 @@
                         <mat-select #classSelect multiple formControlName="controllers">
                             <ng-container *ngFor="let controller of controllerList; ">
                                 <mat-option *ngIf="!isClassNamesLoading" [value]="controller">
-                                    {{ controller.split(",")[0].split(".")[2] }}
+                                    {{ controller.split(",")[0].split(".").reverse()[0] }}
                                 </mat-option>
                             </ng-container>
                         </mat-select>
@@ -39,14 +39,20 @@
                     <mat-form-field>
                         <mat-label>Entry point</mat-label>
                         <mat-select formControlName="isEntryPoint">
-                            <mat-option *ngFor="let entryPoint of ['Any', 'Yes', 'No']" [value]="entryPoint">
-                                {{ entryPoint }}
+                            <mat-option *ngFor="let entryPoint of isRootChoices" [value]="entryPoint.value">
+                                {{ entryPoint.label }}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
 
-                <button mat-stroked-button>Fetch</button>
+                <button [disabled]="isFetching" mat-stroked-button>
+                    <span class="btn-content">
+                        Fetch
+                        <mat-spinner diameter="19" *ngIf="isFetching">
+                        </mat-spinner>
+                    </span>
+                </button>
             </form>
 
             <div class="chart-wrapper">

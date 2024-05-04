@@ -34,6 +34,9 @@ import { SavedSearch } from '../../_core/models/SavedSearch';
 import { NgFor, NgIf } from '@angular/common';
 import { DataService } from '../../_core/services/data.service';
 import { saveAs } from 'file-saver';
+import { BinaryChoice } from '../../_core/consts/BinaryChoice';
+import { OrderByChoices } from '../../_core/consts/OrderBy';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-search',
@@ -43,6 +46,7 @@ import { saveAs } from 'file-saver';
   imports: [
     NgFor,
     NgIf,
+    MatProgressSpinnerModule,
     MatIcon,
     FormsModule,
     ReactiveFormsModule,
@@ -78,11 +82,18 @@ export class SearchComponent implements OnInit {
   pageIndex: number = 0;
   pageSize: number = 12;
 
+  hasExceptionChoices = BinaryChoice;
+
+  isFetching: boolean = false;
+  isExporting: boolean = false;
+
   controllerList: string[] = ['none'];
   endpointList: string[] = ['none'];
 
   isClassNamesLoading: boolean = false;
   isMethodNamesLoading: boolean = false;
+
+  orderByChoices = OrderByChoices;
 
   advancedFilters: Filter[] = [];
   currentSearch: SearchFilter | null = null;
@@ -92,8 +103,8 @@ export class SearchComponent implements OnInit {
     dateEnd: new FormControl<Date | null>(null),
     controllers: new FormControl<string[] | null>(null),
     endpoints: new FormControl<string[] | null>(null),
-    hasException: new FormControl<string | null>('Any'),
-    orderBy: new FormControl<string | null>('Date Descending'),
+    hasException: new FormControl<number>(0),
+    orderBy: new FormControl<number>(0),
     pageSize: new FormControl<number | null>(12),
 
     searchId: new FormControl<string | null>(null),
@@ -115,8 +126,8 @@ export class SearchComponent implements OnInit {
       this.filters.patchValue({
         dateStart: savedSearch.dateStart,
         dateEnd: savedSearch.dateEnd,
-        controllers: savedSearch.controllers,
-        endpoints: savedSearch.endpoints,
+        controllers: savedSearch.classes,
+        endpoints: savedSearch.methods,
         hasException: savedSearch.hasException,
         orderBy: savedSearch.orderBy,
         pageSize: savedSearch.pageSize,
@@ -170,11 +181,11 @@ export class SearchComponent implements OnInit {
       searchValue.trim().length > 0 &&
       operation != null
     ) {
-      const filter = operation.split(' ');
+      const filter = operation.split('');
 
       this.advancedFilters.push({
-        target: filter[0],
-        operation: filter[1].replace('_', ' '),
+        target: Number.parseInt(filter[0]),
+        operation: Number.parseInt(filter[1]),
         value: searchValue,
       });
 
@@ -246,12 +257,23 @@ export class SearchComponent implements OnInit {
   }
 
   exportData() {
-    this.logService
-      .exportLogs(this.currentSearch!)
-      .subscribe((data) => saveAs(data, `export.json`));
+    this.isExporting = true;
+
+    this.logService.exportLogs(this.currentSearch!).subscribe({
+      next: (data) => {
+        saveAs(data, `export.json`);
+        setTimeout(() => {
+          this.isExporting = false;
+        }, 100);
+      },
+      error: (error) => {
+        this.isExporting = false;
+      },
+    });
   }
 
   fetch(pageNo: number = 0) {
+    this.isFetching = true;
     this.pageIndex = pageNo;
 
     const filter = this.filters.value;
@@ -261,23 +283,32 @@ export class SearchComponent implements OnInit {
         filters: null,
         dateStart: null,
         dateEnd: null,
-        controllers: null,
-        endpoints: null,
-        hasException: null,
-        orderBy: null,
+        classes: null,
+        methods: null,
+        hasException: 0,
+        orderBy: 0,
         pageSize: null,
         pageNo: null,
         id: filter.searchId,
       };
 
-      this.logService.searchNodeById(filter.searchId).subscribe((data) => {
-        if (data == null) {
-          this.logs = [];
-          return;
-        }
+      this.logService.getNodeOverview(filter.searchId).subscribe({
+        next: (data) => {
+          setTimeout(() => {
+            this.isFetching = false;
+          }, 100);
 
-        this.logs = [data];
-        this.logsTotalEntries = this.logs.length;
+          if (data == null) {
+            this.logs = [];
+            return;
+          } else {
+            this.logs = [data];
+            this.logsTotalEntries = this.logs.length;
+          }
+        },
+        error: (error) => {
+          this.isFetching = false;
+        },
       });
     } else {
       if (filter.pageSize == null || filter.pageSize < 1) {
@@ -289,8 +320,8 @@ export class SearchComponent implements OnInit {
         filters: this.advancedFilters,
         dateStart: filter.dateStart!,
         dateEnd: filter.dateEnd!,
-        controllers: filter.controllers!,
-        endpoints: filter.endpoints!,
+        classes: filter.controllers!,
+        methods: filter.endpoints!,
         hasException: filter.hasException!,
         orderBy: filter.orderBy!,
         pageSize: filter.pageSize ?? 12,
@@ -299,18 +330,64 @@ export class SearchComponent implements OnInit {
       };
       this.pageSize = this.currentSearch.pageSize!;
 
-      this.logService.searchNodes(this.currentSearch).subscribe((data) => {
-        this.logs = data?.nodes ?? [];
-        this.logsTotalEntries = data?.totalEntries ?? 0;
-        console.log(this.logsTotalEntries);
+      console.log(this.currentSearch);
+
+      this.logService.searchNodes(this.currentSearch).subscribe({
+        next: (data) => {
+          this.logs = data?.nodes ?? [];
+          this.logsTotalEntries = data?.totalEntries ?? 0;
+
+          setTimeout(() => {
+            this.isFetching = false;
+          }, 100);
+        },
+        error: (error) => {
+          this.isFetching = false;
+        },
       });
     }
   }
 
-  orderOptions: string[] = [
-    'Date Ascending',
-    'Date Descending',
-    'Score Ascending',
-    'Score Descending',
-  ];
+  getTarget(option: number) {
+    switch (option) {
+      case 0:
+        return 'Input';
+      case 1:
+        return 'Output';
+      case 2:
+        return 'Information';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  getOperation(option: number) {
+    switch (option) {
+      case 0:
+        return 'is';
+      case 1:
+        return 'is not';
+      case 2:
+        return 'contains';
+      case 3:
+        return 'not contains';
+      case 4:
+        return 'like';
+      case 5:
+        return 'not like';
+      default:
+        return 'unknown';
+    }
+  }
+
+  getFilterValue(value: string, operation: number) {
+    switch (operation) {
+      case 2:
+        return value.replaceAll(' ', "' '");
+      case 3:
+        return value.replaceAll(' ', "' '");
+      default:
+        return value;
+    }
+  }
 }

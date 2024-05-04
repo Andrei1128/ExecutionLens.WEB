@@ -14,6 +14,7 @@ import { SearchFilter } from '../models/SearchFilter';
 import { LogOverview } from '../models/LogOverview';
 import { SavedSearch } from '../models/SavedSearch';
 import { LogOverviewResponse } from '../models/LogOverviewResponse';
+import { ExecutionTime } from '../models/ExecutionTime';
 
 @Injectable({
   providedIn: 'root',
@@ -29,66 +30,75 @@ export class LogService {
   }
 
   getLog(id: string): Observable<Log> {
-    return this.http.get<Log>(`${this.uri}/logs/${id}`);
+    return this.http.get<Log>(`${this.uri}/Log/${id}`);
   }
 
   getClassNames(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.uri}/logs/GetClassNames`);
+    return this.http.get<string[]>(`${this.uri}/Log/GetClassNames`);
   }
 
   getRequestsCount(filters: GraphFilters): Observable<RequestCount[]> {
     return this.http.post<RequestCount[]>(
-      `${this.uri}/logs/GetRequestsCount`,
+      `${this.uri}/Chart/GetRequestsCount`,
       filters
     );
   }
 
   getMethodNames(classNames: string[]): Observable<string[]> {
     return this.http.post<string[]>(
-      `${this.uri}/logs/GetMethodNames`,
+      `${this.uri}/Log/GetMethodNames`,
       classNames
     );
   }
 
   getExecutionsTime(filters: GraphFilters): Observable<ExecutionsTime[]> {
     return this.http.post<ExecutionsTime[]>(
-      `${this.uri}/logs/GetExecutionTimes`,
+      `${this.uri}/Chart/GetExecutionsTimes`,
       filters
+    );
+  }
+
+  getLogExecutionsTime(id: string): Observable<ExecutionTime[]> {
+    return this.http.get<ExecutionTime[]>(
+      `${this.uri}/Chart/GetLogExecutionsTime/${id}`
     );
   }
 
   getExceptionsCount(filters: GraphFilters): Observable<ExceptionsCount[]> {
     return this.http.post<ExceptionsCount[]>(
-      `${this.uri}/logs/GetExceptionsCount`,
+      `${this.uri}/Chart/GetExceptionsCount`,
       filters
     );
   }
 
   searchNodes(filters: SearchFilter): Observable<LogOverviewResponse> {
     return this.http.post<LogOverviewResponse>(
-      `${this.uri}/logs/Search`,
+      `${this.uri}/Search/SearchNodes`,
       filters
     );
   }
 
-  searchNodeById(id: string): Observable<LogOverview> {
-    return this.http.get<LogOverview>(`${this.uri}/logs/Search/${id}`);
+  getNodeOverview(id: string, needRoot = false): Observable<LogOverview> {
+    const params = new HttpParams().set('needRoot', needRoot);
+    return this.http.get<LogOverview>(`${this.uri}/Log/OverviewNode/${id}`, {
+      params,
+    });
   }
 
   saveSearch(search: SavedSearch): Observable<null> {
-    return this.http.post<null>(`${this.uri}/search`, search);
+    return this.http.post<null>(`${this.uri}/Search/Save`, search);
   }
 
   getSearches(): Observable<SavedSearch[]> {
-    return this.http.get<SavedSearch[]>(`${this.uri}/search`);
+    return this.http.get<SavedSearch[]>(`${this.uri}/Search`);
   }
 
   deleteSearch(id: string): Observable<null> {
-    return this.http.delete<null>(`${this.uri}/search/${id}`);
+    return this.http.delete<null>(`${this.uri}/Search/${id}`);
   }
 
   exportLogs(filters: SearchFilter): Observable<Blob> {
-    return this.http.post(`${this.uri}/logs/Export`, filters, {
+    return this.http.post(`${this.uri}/Export/Nodes`, filters, {
       responseType: 'blob',
     });
   }
@@ -104,7 +114,7 @@ export class LogService {
       .set('page', page.toString());
 
     return this.http.get<MethodExceptionsResponse>(
-      `${this.uri}/logs/GetMethodExceptions`,
+      `${this.uri}/Log/GetMethodExceptions`,
       { params }
     );
   }
