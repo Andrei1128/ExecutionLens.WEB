@@ -134,6 +134,11 @@ export class SearchComponent implements OnInit {
         searchId: savedSearch.id,
       });
 
+      if (savedSearch.id != null && savedSearch.id.trim().length > 0) {
+        this.searchByIdActive = true;
+        this.triggerControllsToggle();
+      }
+
       this.fetch();
     }
 
@@ -145,28 +150,31 @@ export class SearchComponent implements OnInit {
       .get('searchId')
       ?.valueChanges.subscribe((value: string | null) => {
         this.searchByIdActive = value!.trim().length > 0;
-        if (this.searchByIdActive) {
-          this.searchBar.disable();
-          this.filters.controls.controllers.disable();
-          this.filters.controls.endpoints.disable();
-          this.filters.controls.dateStart.disable();
-          this.filters.controls.dateEnd.disable();
-          this.filters.controls.hasException.disable();
-          this.filters.controls.orderBy.disable();
-          this.filters.controls.pageSize.disable();
-        } else {
-          this.searchBar.enable();
-          this.filters.controls.controllers.enable();
-          this.filters.controls.endpoints.enable();
-          this.filters.controls.dateStart.enable();
-          this.filters.controls.dateEnd.enable();
-          this.filters.controls.hasException.enable();
-          this.filters.controls.orderBy.enable();
-          this.filters.controls.pageSize.enable();
-        }
+        this.triggerControllsToggle();
       });
   }
 
+  triggerControllsToggle() {
+    if (this.searchByIdActive) {
+      this.searchBar.disable();
+      this.filters.controls.controllers.disable();
+      this.filters.controls.endpoints.disable();
+      this.filters.controls.dateStart.disable();
+      this.filters.controls.dateEnd.disable();
+      this.filters.controls.hasException.disable();
+      this.filters.controls.orderBy.disable();
+      this.filters.controls.pageSize.disable();
+    } else {
+      this.searchBar.enable();
+      this.filters.controls.controllers.enable();
+      this.filters.controls.endpoints.enable();
+      this.filters.controls.dateStart.enable();
+      this.filters.controls.dateEnd.enable();
+      this.filters.controls.hasException.enable();
+      this.filters.controls.orderBy.enable();
+      this.filters.controls.pageSize.enable();
+    }
+  }
   handlePageEvent(e: PageEvent) {
     this.pageIndex = e.pageIndex;
     this.fetch(e.pageIndex);
@@ -237,7 +245,12 @@ export class SearchComponent implements OnInit {
           search: this.currentSearch!,
         };
 
-        this.logService.saveSearch(searchToSave).subscribe(() => {});
+        this.logService.saveSearch(searchToSave).subscribe({
+          next: (data) => {
+            this.searchFilterName.setValue(null);
+          },
+          error: (error) => {},
+        });
 
         this.dialog.closeAll();
       } else return;
@@ -330,8 +343,6 @@ export class SearchComponent implements OnInit {
       };
       this.pageSize = this.currentSearch.pageSize!;
 
-      console.log(this.currentSearch);
-
       this.logService.searchNodes(this.currentSearch).subscribe({
         next: (data) => {
           this.logs = data?.nodes ?? [];
@@ -364,17 +375,17 @@ export class SearchComponent implements OnInit {
   getOperation(option: number) {
     switch (option) {
       case 0:
-        return 'is';
+        return 'equals';
       case 1:
-        return 'is not';
+        return 'equals not';
       case 2:
         return 'contains';
       case 3:
-        return 'not contains';
+        return 'contains not';
       case 4:
-        return 'like';
+        return 'matches';
       case 5:
-        return 'not like';
+        return 'matches not';
       default:
         return 'unknown';
     }

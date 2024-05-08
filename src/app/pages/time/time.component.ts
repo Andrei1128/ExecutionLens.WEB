@@ -123,8 +123,6 @@ export class TimeComponent implements OnInit {
       isEntryPoint: this.filters.controls.isEntryPoint.value!,
     };
 
-    console.log(filters);
-
     this.logService.getExecutionsTime(filters).subscribe({
       next: (data) => {
         this.methodsExecutionTimes = data;

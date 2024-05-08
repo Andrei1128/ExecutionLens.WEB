@@ -36,7 +36,6 @@ export class SavedSearchesComponent implements OnInit {
   ngOnInit(): void {
     this.logService.getSearches().subscribe((searches) => {
       this.searches = searches;
-      console.log(this.searches);
     });
   }
 
@@ -102,17 +101,17 @@ export class SavedSearchesComponent implements OnInit {
   getOperation(option: number) {
     switch (option) {
       case 0:
-        return 'is';
+        return 'equals';
       case 1:
-        return 'is not';
+        return 'equals not';
       case 2:
         return 'contains';
       case 3:
-        return 'not contains';
+        return 'contains not';
       case 4:
-        return 'like';
+        return 'matches';
       case 5:
-        return 'not like';
+        return 'matches not';
       default:
         return 'unknown';
     }

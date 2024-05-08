@@ -11,35 +11,39 @@
                         <p>{{(search.savedAt | dateFormat).split('.')[0]}}</p>
                     </div>
                     <mat-chip-set>
-                        <mat-chip-option *ngIf="search.search.classes != null && search.search.classes.length > 0"
+                        <mat-chip-option
+                            *ngIf="search.search.id == null && search.search.classes != null && search.search.classes.length > 0"
                             disabled>
                             Classes: {{getClasses(search.search.classes)}}
                         </mat-chip-option>
-                        <mat-chip-option *ngIf="search.search.methods != null && search.search.methods.length > 0"
+                        <mat-chip-option
+                            *ngIf="search.search.id == null && search.search.methods != null && search.search.methods.length > 0"
                             disabled>
                             Methods: {{search.search.methods.toString().replaceAll(',',', ')}}
                         </mat-chip-option>
-                        <mat-chip-option *ngIf="search.search.dateStart != null" disabled>
+                        <mat-chip-option *ngIf="search.search.id == null && search.search.dateStart != null" disabled>
                             Date start: {{(search.search.dateStart | dateFormat).split(' ')[0]}}
                         </mat-chip-option>
-                        <mat-chip-option *ngIf="search.search.dateEnd != null" disabled>
+                        <mat-chip-option *ngIf="search.search.id == null && search.search.dateEnd != null" disabled>
                             Date end: {{(search.search.dateEnd | dateFormat).split(' ')[0]}}
                         </mat-chip-option>
-                        <mat-chip-option *ngIf="search.search.hasException != null" disabled>
+                        <mat-chip-option *ngIf="search.search.id == null && search.search.hasException != null"
+                            disabled>
                             Has exception: {{getException(search.search.hasException) }}
                         </mat-chip-option>
 
-                        <div *ngIf="search.search.filters != null && search.search.filters.length > 0">
+                        <div
+                            *ngIf="search.search.id == null && search.search.filters != null && search.search.filters.length > 0">
                             <mat-chip-option *ngFor="let filter of search.search.filters" disabled>
                                 {{getTarget(filter.target)}} {{getOperation(filter.operation)}}
                                 '{{getFilterValue(filter.value,filter.operation)}}'
                             </mat-chip-option>
                         </div>
 
-                        <mat-chip-option *ngIf="search.search.orderBy != null" disabled>
+                        <mat-chip-option *ngIf="search.search.id == null && search.search.orderBy != null" disabled>
                             Order by: {{getOrderBy(search.search.orderBy )}}
                         </mat-chip-option>
-                        <mat-chip-option *ngIf="search.search.pageSize != null" disabled>
+                        <mat-chip-option *ngIf="search.search.id == null && search.search.pageSize != null" disabled>
                             Page size: {{search.search.pageSize }}
                         </mat-chip-option>
 

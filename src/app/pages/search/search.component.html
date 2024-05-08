@@ -18,30 +18,30 @@
                                 *ngIf="(!emptySearch) && !searchByIdActive">
                                 <div class="options-col">
                                     <label>Input</label>
-                                    <mat-radio-button value="00">is</mat-radio-button>
-                                    <mat-radio-button value="01">is not</mat-radio-button>
+                                    <mat-radio-button value="00">equals</mat-radio-button>
+                                    <mat-radio-button value="01">equals not</mat-radio-button>
                                     <mat-radio-button value="02">contains</mat-radio-button>
-                                    <mat-radio-button value="03">not contains</mat-radio-button>
-                                    <mat-radio-button value="04">like</mat-radio-button>
-                                    <mat-radio-button value="05">not like</mat-radio-button>
+                                    <mat-radio-button value="03">contains not</mat-radio-button>
+                                    <mat-radio-button value="04">matches</mat-radio-button>
+                                    <mat-radio-button value="05">matches not</mat-radio-button>
                                 </div>
                                 <div class="options-col">
                                     <label>Output</label>
-                                    <mat-radio-button value="10">is</mat-radio-button>
-                                    <mat-radio-button value="11">is not</mat-radio-button>
+                                    <mat-radio-button value="10">equals</mat-radio-button>
+                                    <mat-radio-button value="11">equals not</mat-radio-button>
                                     <mat-radio-button value="12">contains</mat-radio-button>
-                                    <mat-radio-button value="13">not contains</mat-radio-button>
-                                    <mat-radio-button value="14">like</mat-radio-button>
-                                    <mat-radio-button value="15">not like</mat-radio-button>
+                                    <mat-radio-button value="13">contains not</mat-radio-button>
+                                    <mat-radio-button value="14">matches</mat-radio-button>
+                                    <mat-radio-button value="15">matches not</mat-radio-button>
                                 </div>
                                 <div class="options-col second-col">
                                     <label>Information</label>
-                                    <mat-radio-button value="20">is</mat-radio-button>
-                                    <mat-radio-button value="21">is not</mat-radio-button>
+                                    <mat-radio-button value="20">equals</mat-radio-button>
+                                    <mat-radio-button value="21">equals not</mat-radio-button>
                                     <mat-radio-button value="22">contains</mat-radio-button>
-                                    <mat-radio-button value="23">not contains</mat-radio-button>
-                                    <mat-radio-button value="24">like</mat-radio-button>
-                                    <mat-radio-button value="25">not like</mat-radio-button>
+                                    <mat-radio-button value="23">contains not</mat-radio-button>
+                                    <mat-radio-button value="24">matches</mat-radio-button>
+                                    <mat-radio-button value="25">matches not</mat-radio-button>
                                 </div>
                             </mat-radio-group>
 
@@ -150,7 +150,7 @@
             <div [routerLink]="['/log', log.id]" class="logs-wrapper" *ngFor="let log of logs">
                 <div class="log">
                     <div class="log-metadata">
-                        <p>{{log.class}}</p>
+                        <p>{{log.class.split(",")[0].split(".").reverse()[0]}}</p>
                         <p>{{log.method}}</p>
                         <p class="logId">{{log.id}}</p>
                     </div>

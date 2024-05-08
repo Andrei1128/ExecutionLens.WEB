@@ -111,15 +111,12 @@ export class LogDetailsComponent implements OnInit, OnDestroy {
       this.methodsExecutionTimeLoading = false;
     });
 
-    // this.sequenceDiagramLoading = true;
     this.logService.getLog(this.logId!).subscribe({
       next: (res) => {
         this.sequenceDiagramLoading = false;
         this.initializeSequenceDiagram(res);
       },
-      error: (error) => {
-        console.log(error);
-      },
+      error: (error) => {},
     });
 
     document.body.addEventListener('wheel', this.hidePopover.bind(this));

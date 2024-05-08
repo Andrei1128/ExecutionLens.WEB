@@ -168,8 +168,6 @@ export class ExceptionsComponent implements OnInit {
       isEntryPoint: this.filters.controls.isEntryPoint.value!,
     };
 
-    console.log(filters);
-
     this.logService.getExceptionsCount(filters).subscribe({
       next: (data) => {
         this.exceptionsCount = data;
