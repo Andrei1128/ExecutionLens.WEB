@@ -286,9 +286,9 @@ export class LogDetailsComponent implements OnInit, OnDestroy {
       interactions.push({
         interactor: this.getControllerName(lastLog?.class ?? 'Initiator'),
         interactee: this.getControllerName(currentLog?.class),
-        message: `${currentLog?.method}(${currentLog.input
-          ?.map((x) => x.type)
-          ?.join(', ')}): ${currentLog?.output?.type}`,
+        message: `${currentLog?.method}(${
+          currentLog.input?.map((x) => x.type)?.join(', ') ?? ''
+        }): ${currentLog?.output?.type ?? 'void'}`,
         arrow: '->>+',
         note: null,
         timestamp: new Date(currentLog?.entryTime).getTime(),
@@ -309,7 +309,8 @@ export class LogDetailsComponent implements OnInit, OnDestroy {
         });
       });
     } else {
-      if (currentLog?.output) content = currentLog?.output.value;
+      if (currentLog?.output)
+        content = currentLog?.output.value.replaceAll('\\r\\n', '\n');
 
       interactions.push({
         interactor: this.getControllerName(currentLog?.class),
