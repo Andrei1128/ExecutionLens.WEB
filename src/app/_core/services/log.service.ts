@@ -22,12 +22,12 @@ import { NLPSearchResponse } from '../models/NLPSearchResponse';
 })
 export class LogService {
   uri = 'http://localhost:5000';
-  uriReplay = 'http://localhost:5001';
+  uriReplay = 'https://localhost:7139';
 
   constructor(private http: HttpClient) {}
 
   replay(id: string): Observable<null> {
-    return this.http.post<null>(`${this.uriReplay}/Replay`, id);
+    return this.http.post<null>(`${this.uriReplay}/Replay/${id}`, null);
   }
 
   getLog(id: string): Observable<Log> {
