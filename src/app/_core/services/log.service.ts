@@ -15,6 +15,7 @@ import { LogOverview } from '../models/LogOverview';
 import { SavedSearch } from '../models/SavedSearch';
 import { LogOverviewResponse } from '../models/LogOverviewResponse';
 import { ExecutionTime } from '../models/ExecutionTime';
+import { NLPSearchResponse } from '../models/NLPSearchResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -75,6 +76,13 @@ export class LogService {
     return this.http.post<LogOverviewResponse>(
       `${this.uri}/Search/SearchNodes`,
       filters
+    );
+  }
+
+  nlpSearchNodes(textQuery: string): Observable<NLPSearchResponse> {
+    return this.http.post<NLPSearchResponse>(
+      `${this.uri}/Search/NLPSearchNodes`,
+      { textQuery: textQuery }
     );
   }
 

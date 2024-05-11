@@ -73,8 +73,10 @@ export class SearchComponent implements OnInit {
   requestsCountChart: Chart | null = null;
   emptySearch: boolean = true;
   searchByIdActive: boolean = false;
+  searchByNLPActive: boolean = false;
   @ViewChild('saveSearchDialog') saveSearchDialog: TemplateRef<any> | undefined;
   searchBar: FormControl<string | null> = new FormControl('');
+  nlpSearchBar: FormControl<string | null> = new FormControl('');
   searchFilterName: FormControl<string | null> = new FormControl(null);
   radioButtonGroup = new FormControl();
   logs: LogOverview[] = [];
@@ -146,16 +148,38 @@ export class SearchComponent implements OnInit {
       this.emptySearch = value?.trim().length === 0;
     });
 
-    this.filters
-      .get('searchId')
-      ?.valueChanges.subscribe((value: string | null) => {
-        this.searchByIdActive = value!.trim().length > 0;
+    this.filters.controls.searchId.valueChanges.subscribe(
+      (value: string | null) => {
+        if (this.filters.controls.searchId.enabled) {
+          if (value == null || value.trim().length == 0) {
+            this.searchByIdActive = false;
+            if (!this.nlpSearchBar.enabled) this.nlpSearchBar.enable();
+          } else {
+            this.nlpSearchBar.disable();
+            this.searchByIdActive = true;
+          }
+        }
         this.triggerControllsToggle();
-      });
+      }
+    );
+
+    this.nlpSearchBar.valueChanges.subscribe((value: string | null) => {
+      if (this.nlpSearchBar.enabled) {
+        if (value == null || value.trim().length == 0) {
+          this.searchByNLPActive = false;
+          if (!this.filters.controls.searchId.enabled)
+            this.filters.controls.searchId.enable();
+        } else {
+          this.searchByNLPActive = true;
+          this.filters.controls.searchId.disable();
+        }
+      }
+      this.triggerControllsToggle();
+    });
   }
 
   triggerControllsToggle() {
-    if (this.searchByIdActive) {
+    if (this.searchByIdActive || this.searchByNLPActive) {
       this.searchBar.disable();
       this.filters.controls.controllers.disable();
       this.filters.controls.endpoints.disable();
@@ -177,7 +201,7 @@ export class SearchComponent implements OnInit {
   }
   handlePageEvent(e: PageEvent) {
     this.pageIndex = e.pageIndex;
-    this.fetch(e.pageIndex);
+    this.fetch(e.pageIndex, true);
   }
 
   addAdvancedFilter() {
@@ -285,13 +309,39 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  fetch(pageNo: number = 0) {
+  fetch(pageNo: number = 0, ignoreNLP: boolean = false) {
     this.isFetching = true;
     this.pageIndex = pageNo;
 
     const filter = this.filters.value;
 
-    if (filter.searchId != null && filter.searchId.trim().length > 0) {
+    const nlpQuery = this.nlpSearchBar.value;
+    if (!ignoreNLP && nlpQuery != null && nlpQuery.trim().length > 0) {
+      this.logService.nlpSearchNodes(nlpQuery).subscribe({
+        next: (data) => {
+          this.isFetching = false;
+
+          this.currentSearch = data?.filters;
+          this.advancedFilters = this.currentSearch.filters ?? [];
+          this.filters.patchValue({
+            dateStart: this.currentSearch.dateStart,
+            dateEnd: this.currentSearch.dateEnd,
+            controllers: this.currentSearch.classes,
+            endpoints: this.currentSearch.methods,
+            hasException: this.currentSearch.hasException,
+            orderBy: this.currentSearch.orderBy,
+            pageSize: this.currentSearch.pageSize,
+            searchId: this.currentSearch.id,
+          });
+
+          this.logs = data?.result.nodes ?? [];
+          this.logsTotalEntries = data?.result.totalEntries ?? 0;
+        },
+        error: (error) => {
+          this.isFetching = false;
+        },
+      });
+    } else if (filter.searchId != null && filter.searchId.trim().length > 0) {
       this.currentSearch = {
         filters: null,
         dateStart: null,

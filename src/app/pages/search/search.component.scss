@@ -17,6 +17,10 @@
     }
 }
 
+.nlp-search-bar {
+    width: 48rem;
+}
+
 .add-btn {
     padding: 0.7rem 1.2rem;
     text-wrap: nowrap;
@@ -28,7 +32,7 @@
     justify-content: space-around;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    top: 4.2rem;
+    top: 9.8rem;
     gap: 2rem;
     display: flex;
     padding: 0.5rem;

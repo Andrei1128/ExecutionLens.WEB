@@ -5,17 +5,21 @@
                 <div class="form">
                     <div class="form-item search-form-item">
                         <div class="search-accordion">
+                            <mat-form-field class="nlp-search-bar">
+                                <mat-label>Natural language search</mat-label>
+                                <input [formControl]="nlpSearchBar" matInput>
+                            </mat-form-field>
                             <div class="search-header">
                                 <mat-form-field class="search-bar">
                                     <mat-label>Filter</mat-label>
                                     <input [formControl]="searchBar" matInput>
                                 </mat-form-field>
                                 <button (click)="addAdvancedFilter()" type="button"
-                                    *ngIf="(!emptySearch) && !searchByIdActive" class="add-btn" mat-stroked-button>Add
-                                    Filter</button>
+                                    *ngIf="(!emptySearch) && (!searchByIdActive && !searchByNLPActive)" class="add-btn"
+                                    mat-stroked-button>Add Filter</button>
                             </div>
                             <mat-radio-group [formControl]="radioButtonGroup" class="search-body"
-                                *ngIf="(!emptySearch) && !searchByIdActive">
+                                *ngIf="(!emptySearch) && (!searchByIdActive && !searchByNLPActive)">
                                 <div class="options-col">
                                     <label>Input</label>
                                     <mat-radio-button value="00">equals</mat-radio-button>
@@ -47,9 +51,9 @@
 
                         </div>
                         <mat-chip-set>
-                            <mat-chip-option [ngClass]="{'disabled-chip': searchByIdActive}"
-                                [disabled]="searchByIdActive" *ngFor="let filter of advancedFilters"
-                                (click)="removeAdvancedFilter(filter)">
+                            <mat-chip-option [ngClass]="{'disabled-chip': searchByIdActive || searchByNLPActive}"
+                                [disabled]="searchByIdActive || searchByNLPActive"
+                                *ngFor="let filter of advancedFilters" (click)="removeAdvancedFilter(filter)">
                                 <div class="search-filter-chip">
                                     {{getTarget(filter.target)}} {{getOperation(filter.operation)}}
                                     '{{getFilterValue(filter.value,filter.operation)}}'
