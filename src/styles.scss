@@ -53,6 +53,14 @@
     background-color: var(--btn-secondary) !important;
 }
 
+.mat-mdc-snack-bar-container .mdc-snackbar__label {
+    color: var(--mat-stepper-header-error-state-label-text-color) !important;
+    font-size: 1.1rem !important;
+}
+
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+    background-color: var(--btn-primary) !important;
+}
 
 .mat-date-range-input-inner[disabled],
 .mdc-text-field--filled.mdc-text-field--disabled .mdc-text-field__input {

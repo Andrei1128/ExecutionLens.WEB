@@ -37,6 +37,7 @@ import { saveAs } from 'file-saver';
 import { BinaryChoice } from '../../_core/consts/BinaryChoice';
 import { OrderByChoices } from '../../_core/consts/OrderBy';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-search',
@@ -115,7 +116,8 @@ export class SearchComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private logService: LogService,
-    private dataService: DataService
+    private dataService: DataService,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -313,6 +315,12 @@ export class SearchComponent implements OnInit {
     this.isFetching = true;
     this.pageIndex = pageNo;
 
+    this._snackBar.open('asdasdsrgsa asdasd', 'Close', {
+      duration: 7000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+    });
+
     const filter = this.filters.value;
 
     const nlpQuery = this.nlpSearchBar.value;
@@ -320,6 +328,15 @@ export class SearchComponent implements OnInit {
       this.logService.nlpSearchNodes(nlpQuery).subscribe({
         next: (data) => {
           this.isFetching = false;
+
+          if (data.error != null) {
+            this._snackBar.open(data.error, 'Close', {
+              duration: 7000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+            });
+            return;
+          }
 
           this.currentSearch = data?.filters;
           this.advancedFilters = this.currentSearch.filters ?? [];

@@ -4,4 +4,5 @@ import { SearchFilter } from './SearchFilter';
 export interface NLPSearchResponse {
   result: LogOverviewResponse;
   filters: SearchFilter;
+  error: string;
 }
