@@ -315,12 +315,6 @@ export class SearchComponent implements OnInit {
     this.isFetching = true;
     this.pageIndex = pageNo;
 
-    this._snackBar.open('asdasdsrgsa asdasd', 'Close', {
-      duration: 7000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-    });
-
     const filter = this.filters.value;
 
     const nlpQuery = this.nlpSearchBar.value;
