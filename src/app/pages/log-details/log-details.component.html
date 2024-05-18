@@ -12,14 +12,14 @@
             </div>
             <mat-card>
                 <div class="log-overview">
-                    <p><span class="row-header">Id:</span> <span>{{logId}}</span></p>
+                    <p><span class="row-header">Id:</span> <span>{{log?.id}}</span></p>
                     <mat-divider></mat-divider>
                     <p><span class="row-header">Controller:</span> <span>{{getControllerName(log?.class)}}</span>
                     </p>
                     <mat-divider></mat-divider>
                     <p><span class="row-header">Method:</span> <span>{{log?.method}}</span></p>
                     <mat-divider></mat-divider>
-                    <p><span class="row-header">Has exception:</span> <span>{{true}}</span></p>
+                    <p><span class="row-header">Has exception:</span> <span>{{log?.hasException}}</span></p>
                     <mat-divider></mat-divider>
                     <p><span class="row-header">Called at:</span> <span>{{log?.entryTime | dateFormat}}</span></p>
                     <mat-divider></mat-divider>

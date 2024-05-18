@@ -274,14 +274,17 @@ export class LogDetailsComponent implements OnInit, OnDestroy {
     let content: string = 'No Content';
 
     if (!isCallBack) {
-      if (currentLog?.input && currentLog.input.length > 0)
-        content = JSON.stringify(
-          currentLog?.input.map((x) => x.value),
-          null,
-          2
-        )
-          .replaceAll('\\r\\n', '\n')
-          .replaceAll('\\"', '"');
+      if (currentLog?.input && currentLog.input.length > 0) {
+        let rawContent = currentLog?.input
+          .map((x) =>
+            x.value
+              .split('\n')
+              .map((line) => `\n  ${line}`)
+              .join('')
+          )
+          .toString();
+        content = `[\n  ${rawContent.trim()}\n]`;
+      }
 
       interactions.push({
         interactor: this.getControllerName(lastLog?.class ?? 'Initiator'),
@@ -309,8 +312,7 @@ export class LogDetailsComponent implements OnInit, OnDestroy {
         });
       });
     } else {
-      if (currentLog?.output)
-        content = currentLog?.output.value.replaceAll('\\r\\n', '\n');
+      if (currentLog?.output) content = currentLog?.output.value;
 
       interactions.push({
         interactor: this.getControllerName(currentLog?.class),
