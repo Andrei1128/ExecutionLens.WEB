@@ -1,17 +1,17 @@
 :root {
-    --main-background: #080f25;
-    --second-background: #101935;
+    --main-background: #ffffff;
+    --second-background: #ffffff;
 
-    --main-font: #aeb9e1;
-    --second-font: white;
+    --main-font: #000000;
+    --second-font: rgb(0, 0, 0);
 
-    --btn-primary: #212c4d;
+    --btn-primary: #f8f8f8;
     --btn-secondary: #6c72ff;
 
-    --main-border: #343b4f;
-    --second-border: #182142;
+    --main-border: #515152;
+    --second-border: #565758;
 
-    --general-shadow: rgba(20, 20, 43, .06);
+    --general-shadow: rgba(101, 101, 109, 0.06);
 }
 
 .mat-mdc-dialog-container .mdc-dialog__title {
@@ -30,7 +30,7 @@
 .mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled),
 .mat-mdc-standard-chip.mdc-evolution-chip--disabled {
     box-sizing: content-box;
-    background-color: #182342 !important;
+    background-color: rgb(248, 249, 255) !important;
     opacity: 1 !important;
     border: 0.1px solid var(--main-border) !important;
 }
@@ -256,8 +256,8 @@ body {
 
 .component-container {
     overflow-y: scroll !important;
-    border-top: 0.1px solid var(--main-border);
-    border-bottom: 0.1px solid var(--main-border);
+    // border-top: 0.1px solid var(--main-border);
+    // border-bottom: 0.1px solid var(--main-border);
     border-radius: 0.6rem;
     max-height: 100%;
     overflow-y: auto;

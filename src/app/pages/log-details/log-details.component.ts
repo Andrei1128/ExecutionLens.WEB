@@ -62,24 +62,7 @@ export class LogDetailsComponent implements OnInit, OnDestroy {
     dynamicContentDimensions: true,
   });
 
-  sequenceDiagramTheme = `
-  %%{
-    init: {
-      "theme": "base",
-      "themeVariables": {
-        "primaryColor": "#212c4d",
-        "secondaryColor": "#212c4d",
-        "noteBkgColor": "#212c4d",
-
-        "primaryBorderColor": "#717582",
-        "noteBorderColor": "#b9bcc7",
-        "activationBorderColor": "#b9bcc7",
-
-        "primaryTextColor": "#b9bcc7",
-        "noteTextColor": "#b9bcc7"
-      }
-    }
-  }%%`;
+  sequenceDiagramTheme = ``;
 
   showPopoverFlag: boolean = false;
   popoverX: number = 0;

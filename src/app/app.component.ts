@@ -26,12 +26,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     Chart.register(this.legendMargin);
-    Chart.defaults.datasets.doughnut.borderColor = 'inherit';
+    Chart.defaults.datasets.doughnut.borderColor = 'white';
     Chart.defaults.datasets.doughnut.borderWidth = 2;
     Chart.defaults.datasets.doughnut.borderRadius = 5;
     Chart.defaults.datasets.bar.borderWidth = 2;
     Chart.defaults.layout.padding = 10;
-    Chart.defaults.borderColor = '#343b4f';
-    Chart.defaults.color = '#aeb9e1';
+    Chart.defaults.color = 'black';
   }
 }
