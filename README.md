@@ -1,4 +1,4 @@
-# Web Interface for Execution Logs
+# ExecutionLens Web Interface
 
 This documentation outlines the features and functionality of the **ExecutionLens** web interface, which interacts with API execution logs. The interface is designed to improve debugging, performance tracking, and system analysis.
 
