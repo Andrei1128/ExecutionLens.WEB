@@ -24,7 +24,7 @@ This documentation outlines the features and functionality of the **ExecutionLen
      - 
 ## GitHub Repository for the API
 
-[ExecutionLens.API GitHub Repository]([https://github.com/Andrei1128/ExecutionLens.Debugging](https://github.com/Andrei1128/ExecutionLens.API))
+[ExecutionLens.API GitHub Repository](https://github.com/Andrei1128/ExecutionLens.API)
 
 ## Application showcase
 
